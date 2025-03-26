@@ -10,3 +10,12 @@ spring:
   sql:
     init:
       mode: always
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic: pedidotopic
+    consumer:
+      group-id: grupo-pedidotopic-receiver
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
