@@ -17,5 +17,6 @@ import java.time.LocalDate;
 @Builder
 public class EstoqueRequest {
     private Long id;
+    private Integer quantidade;
     private EstoqueDTO estoqueDTO;
 }
