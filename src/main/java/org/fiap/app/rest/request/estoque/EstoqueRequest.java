@@ -18,5 +18,4 @@ import java.time.LocalDate;
 public class EstoqueRequest {
     private Long id;
     private Integer quantidade;
-    private EstoqueDTO estoqueDTO;
 }

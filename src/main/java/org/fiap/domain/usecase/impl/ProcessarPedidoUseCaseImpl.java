@@ -57,10 +57,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 estoqueGatewayService.updateByIdProduto(
                         EstoqueRequest.builder()
                                 .id(item.getProdutoId())
-                                .estoqueDTO(EstoqueDTO.builder()
-                                        .produtoId(item.getProdutoId())
-                                        .quantidade(item.getQuantidade())
-                                        .build())
+                                .quantidade(item.getQuantidade())
                                 .build()
                 ));
         log.info("Baixa de Estoque em execução.");

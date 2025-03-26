@@ -31,7 +31,6 @@ public class EstoqueGatewayService {
 
     public EstoqueDTO updateByIdProduto(EstoqueRequest request) {
         try {
-            request.setQuantidade(17);
             return gateway.estoqueUpdateByIdProduto(new GenericMessage<>(request));
         } catch (ResourceAccessException ex) {
             log.error(API_INDISPONIVEL);
