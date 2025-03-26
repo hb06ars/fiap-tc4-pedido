@@ -6,7 +6,6 @@ import org.fiap.app.service.ClienteGatewayService;
 import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.app.service.ProdutoGatewayService;
 import org.fiap.domain.dto.ClienteDTO;
-import org.fiap.domain.dto.EstoqueDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
@@ -68,7 +67,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 item -> (estoqueGatewayService
                         .findByIdProduto(item.getProdutoId()).getQuantidade() - item.getQuantidade()) < 0
         );
-        if (estoqueInvalido){
+        if (estoqueInvalido) {
             log.error("Estoque inválido.");
             return false;
         }
@@ -87,12 +86,15 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private void preenchendoProdutoId(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
-        pedidoDTO.getItensPedidoList().forEach(item -> {
-            produtos.stream()
-                    .filter(produto -> produto.getSku().equalsIgnoreCase(item.getSkuProduto()))
-                    .findFirst()
-                    .ifPresent(produto -> item.setProdutoId(produto.getId()));
-        });
+        pedidoDTO.getItensPedidoList().forEach(item -> produtos.stream()
+                .filter(produto -> produto.getSku().equalsIgnoreCase(item.getSkuProduto()))
+                .findFirst()
+                .ifPresent(produto -> {
+                    item.setProdutoId(produto.getId());
+                    item.setQuantidade(estoqueGatewayService
+                            .findByIdProduto(produto.getId()).getQuantidade() - item.getQuantidade()
+                    );
+                }));
     }
 
     private BigDecimal calcularTotal(List<ProdutoDTO> produtos) {
