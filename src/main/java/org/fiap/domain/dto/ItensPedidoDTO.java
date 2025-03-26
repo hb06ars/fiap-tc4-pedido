@@ -20,6 +20,7 @@ public class ItensPedidoDTO {
     private Long id;
     private Long pedidoId;
     private String skuProduto;
+    private Long produtoId;
     private Integer quantidade;
     private LocalDateTime dtAtualizacao;
 

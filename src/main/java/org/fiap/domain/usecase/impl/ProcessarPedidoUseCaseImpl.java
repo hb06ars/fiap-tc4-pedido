@@ -1,6 +1,7 @@
 package org.fiap.domain.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.fiap.app.rest.request.estoque.EstoqueRequest;
 import org.fiap.app.service.ClienteGatewayService;
 import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.app.service.ProdutoGatewayService;
@@ -8,7 +9,6 @@ import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
-import org.fiap.infra.exceptions.GlobalException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
         BigDecimal totalCompra = calcularTotal(produtos);
 
-        if(baixaEstoqueEfetuada(pedidoDTO)){
+        if (baixaEstoqueEfetuada(pedidoDTO)) {
             System.out.println(totalCompra);
             System.out.println(produtos);
             System.out.println(cliente);
@@ -43,7 +43,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private boolean baixaEstoqueEfetuada(PedidoDTO pedidoDTO) {
-        if(validarEstoque(pedidoDTO)){
+        if (validarEstoque(pedidoDTO)) {
             efetuarBaixa(pedidoDTO);
             log.info("Baixa de Estoque relizada com sucesso.");
             return true;
@@ -52,25 +52,44 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private void efetuarBaixa(PedidoDTO pedidoDTO) {
+        pedidoDTO.getItensPedidoList().forEach(item ->
+                estoqueGatewayService.estoqueUpdateByIdProduto(
+                        EstoqueRequest.builder()
+                                .id(item.getProdutoId())
+                                .quantidade(item.getQuantidade())
+                                .build()
+                ));
         log.info("Baixa de Estoque em execução.");
     }
 
     private boolean validarEstoque(PedidoDTO pedidoDTO) {
         var estoqueValido = pedidoDTO.getItensPedidoList().stream().anyMatch(
                 item -> (estoqueGatewayService
-                        .findByIdProduto(item.getId()).getQuantidade() - item.getQuantidade()) < 0
+                        .findByIdProduto(item.getProdutoId()).getQuantidade() - item.getQuantidade()) < 0
         );
-        if(!estoqueValido)
+        if (!estoqueValido)
             log.error("Estoque inválido.");
         log.info("Estoque válido.");
         return estoqueValido;
     }
 
     private List<ProdutoDTO> buscarProdutos(PedidoDTO pedidoDTO) {
-        return pedidoDTO.getItensPedidoList()
+        var produtos = pedidoDTO.getItensPedidoList()
                 .stream()
                 .map(item -> produtoGatewayService.findBySku(item.getSkuProduto()))
                 .toList();
+
+        preenchendoProdutoId(produtos, pedidoDTO);
+        return produtos;
+    }
+
+    private void preenchendoProdutoId(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
+        pedidoDTO.getItensPedidoList().forEach(item -> {
+            produtos.stream()
+                    .filter(produto -> produto.getSku().equalsIgnoreCase(item.getSkuProduto()))
+                    .findFirst()
+                    .ifPresent(produto -> item.setProdutoId(produto.getId()));
+        });
     }
 
     private BigDecimal calcularTotal(List<ProdutoDTO> produtos) {
