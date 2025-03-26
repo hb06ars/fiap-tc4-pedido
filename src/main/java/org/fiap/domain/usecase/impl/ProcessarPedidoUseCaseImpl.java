@@ -53,7 +53,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     private void efetuarBaixa(PedidoDTO pedidoDTO) {
         pedidoDTO.getItensPedidoList().forEach(item ->
-                estoqueGatewayService.estoqueUpdateByIdProduto(
+                estoqueGatewayService.updateByIdProduto(
                         EstoqueRequest.builder()
                                 .id(item.getProdutoId())
                                 .quantidade(item.getQuantidade())

@@ -34,10 +34,10 @@ public class EstoqueConfiguration {
     }
 
     @Bean
-    public IntegrationFlow estoqueUpdateByIdProduto() {
+    public IntegrationFlow updateByIdProduto() {
         return IntegrationFlow.from("estoqueUpdateByIdProduto")
                 .handle(Http.outboundGateway(m -> ESTOQUE_BASE_URL.concat("?produtoId=" + m.getPayload()))
-                        .httpMethod(HttpMethod.GET)
+                        .httpMethod(HttpMethod.PUT)
                         .expectedResponseType(EstoqueDTO.class)
                         .errorHandler(new GatewayResponseErrorHandler())
                 )

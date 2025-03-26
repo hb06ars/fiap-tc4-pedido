@@ -29,7 +29,7 @@ public class EstoqueGatewayService {
         }
     }
 
-    public EstoqueDTO estoqueUpdateByIdProduto(EstoqueRequest request) {
+    public EstoqueDTO updateByIdProduto(EstoqueRequest request) {
         try {
             return gateway.estoqueUpdateByIdProduto(new GenericMessage<>(request));
         } catch (ResourceAccessException ex) {
