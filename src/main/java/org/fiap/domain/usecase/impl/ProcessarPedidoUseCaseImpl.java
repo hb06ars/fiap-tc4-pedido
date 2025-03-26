@@ -63,14 +63,16 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private boolean validarEstoque(PedidoDTO pedidoDTO) {
-        var estoqueValido = pedidoDTO.getItensPedidoList().stream().anyMatch(
+        var estoqueInvalido = pedidoDTO.getItensPedidoList().stream().anyMatch(
                 item -> (estoqueGatewayService
                         .findByIdProduto(item.getProdutoId()).getQuantidade() - item.getQuantidade()) < 0
         );
-        if (!estoqueValido)
+        if (estoqueInvalido){
             log.error("Estoque inválido.");
+            return false;
+        }
         log.info("Estoque válido.");
-        return estoqueValido;
+        return true;
     }
 
     private List<ProdutoDTO> buscarProdutos(PedidoDTO pedidoDTO) {
