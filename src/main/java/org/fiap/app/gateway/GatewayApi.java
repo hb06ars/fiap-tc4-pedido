@@ -9,8 +9,8 @@ import org.springframework.messaging.Message;
 @MessagingGateway
 public interface GatewayApi {
 
-    @Gateway(requestChannel = "clienteFindByCpf", requestTimeout = 5000)
-    ClienteDTO findByCpf(Message<String> cpf);
+    @Gateway(requestChannel = "clienteFindById", requestTimeout = 5000)
+    ClienteDTO findById(Message<Long> id);
 
     @Gateway(requestChannel = "produtoFindBySku", requestTimeout = 5000)
     ProdutoDTO findBySku(Message<String> sku);

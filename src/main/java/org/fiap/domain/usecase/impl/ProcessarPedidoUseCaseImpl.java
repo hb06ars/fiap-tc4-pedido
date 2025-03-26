@@ -3,6 +3,7 @@ package org.fiap.domain.usecase.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.service.ClienteGatewayService;
 import org.fiap.app.service.ProdutoGatewayService;
+import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
@@ -25,13 +26,14 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     @Override
     public void execute(PedidoDTO pedidoDTO) {
+        ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
         BigDecimal totalCompra = calcularTotal(produtos);
 
         System.out.println(totalCompra);
         System.out.println(produtos);
+        System.out.println(cliente);
 
-        var clienteDTO = clienteGatewayService.findByCpf("22553344888");
 
 
     }

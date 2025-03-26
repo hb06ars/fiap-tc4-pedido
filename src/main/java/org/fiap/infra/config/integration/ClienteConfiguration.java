@@ -23,8 +23,8 @@ public class ClienteConfiguration {
     }
 
     @Bean
-    public IntegrationFlow findByCpf() {
-        return IntegrationFlow.from("clienteFindByCpf")
+    public IntegrationFlow findById() {
+        return IntegrationFlow.from("clienteFindById")
                 .handle(Http.outboundGateway(m -> CLIENTE_BASE_URL.concat("?cpf=" + m.getPayload()))
                         .httpMethod(HttpMethod.GET)
                         .expectedResponseType(ClienteDTO.class)
