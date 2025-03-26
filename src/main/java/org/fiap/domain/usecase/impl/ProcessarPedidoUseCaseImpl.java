@@ -30,17 +30,40 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     @Override
     public void execute(PedidoDTO pedidoDTO) {
+        ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
         BigDecimal totalCompra = calcularTotal(produtos);
-        pedidoDTO.setTotalCompra(totalCompra);
 
-        ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
-        
-        System.out.println(totalCompra);
-        System.out.println(produtos);
-        System.out.println(cliente);
+        if(baixaEstoqueEfetuada(pedidoDTO)){
+            System.out.println(totalCompra);
+            System.out.println(produtos);
+            System.out.println(cliente);
+        }
 
+    }
 
+    private boolean baixaEstoqueEfetuada(PedidoDTO pedidoDTO) {
+        if(validarEstoque(pedidoDTO)){
+            efetuarBaixa(pedidoDTO);
+            log.info("Baixa de Estoque relizada com sucesso.");
+            return true;
+        }
+        return false;
+    }
+
+    private void efetuarBaixa(PedidoDTO pedidoDTO) {
+        log.info("Baixa de Estoque em execução.");
+    }
+
+    private boolean validarEstoque(PedidoDTO pedidoDTO) {
+        var estoqueValido = pedidoDTO.getItensPedidoList().stream().anyMatch(
+                item -> (estoqueGatewayService
+                        .findByIdProduto(item.getId()).getQuantidade() - item.getQuantidade()) < 0
+        );
+        if(!estoqueValido)
+            log.error("Estoque inválido.");
+        log.info("Estoque válido.");
+        return estoqueValido;
     }
 
     private List<ProdutoDTO> buscarProdutos(PedidoDTO pedidoDTO) {
