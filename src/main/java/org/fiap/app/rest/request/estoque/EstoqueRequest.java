@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fiap.domain.dto.EstoqueDTO;
 
 import java.time.LocalDate;
 
@@ -16,5 +17,5 @@ import java.time.LocalDate;
 @Builder
 public class EstoqueRequest {
     private Long id;
-    private Integer quantidade;
+    private EstoqueDTO estoqueDTO;
 }

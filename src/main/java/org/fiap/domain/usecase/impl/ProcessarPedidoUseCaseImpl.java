@@ -6,6 +6,7 @@ import org.fiap.app.service.ClienteGatewayService;
 import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.app.service.ProdutoGatewayService;
 import org.fiap.domain.dto.ClienteDTO;
+import org.fiap.domain.dto.EstoqueDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
@@ -56,7 +57,10 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 estoqueGatewayService.updateByIdProduto(
                         EstoqueRequest.builder()
                                 .id(item.getProdutoId())
-                                .quantidade(item.getQuantidade())
+                                .estoqueDTO(EstoqueDTO.builder()
+                                        .produtoId(item.getProdutoId())
+                                        .quantidade(item.getQuantidade())
+                                        .build())
                                 .build()
                 ));
         log.info("Baixa de Estoque em execução.");

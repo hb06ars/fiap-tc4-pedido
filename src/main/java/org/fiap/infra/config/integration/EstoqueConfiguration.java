@@ -11,6 +11,7 @@ import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
 import static org.fiap.domain.util.UrlConstants.ESTOQUE_BASE_URL;
+import static org.fiap.domain.util.UrlConstants.PRODUTO_BASE_URL;
 
 @Configuration
 public class EstoqueConfiguration {
@@ -36,9 +37,11 @@ public class EstoqueConfiguration {
     @Bean
     public IntegrationFlow updateByIdProduto() {
         return IntegrationFlow.from("estoqueUpdateByIdProduto")
-                .handle(Http.outboundGateway(m -> ESTOQUE_BASE_URL.concat("?produtoId=" + m.getPayload()))
+                .handle(Http.outboundGateway(ESTOQUE_BASE_URL.concat("/{produtoId}"))
                         .httpMethod(HttpMethod.PUT)
                         .expectedResponseType(EstoqueDTO.class)
+                        .extractPayload(true)
+                        .uriVariable("produtoId", "payload.id")
                         .errorHandler(new GatewayResponseErrorHandler())
                 )
                 .log().bridge().get();
