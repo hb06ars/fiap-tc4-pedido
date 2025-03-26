@@ -21,7 +21,7 @@ public class ClienteGatewayService {
 
     public ClienteDTO findById(Long id) {
         try {
-            return gateway.findById(new GenericMessage<>(id));
+            return gateway.clienteFindById(new GenericMessage<>(id));
         } catch (ResourceAccessException ex) {
             log.error(API_INDISPONIVEL);
             return null;
