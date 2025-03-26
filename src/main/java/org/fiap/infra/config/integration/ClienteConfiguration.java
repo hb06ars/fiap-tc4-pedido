@@ -10,6 +10,8 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
+import static org.fiap.domain.util.UrlConstants.CLIENTE_BASE_URL;
+
 @Configuration
 public class ClienteConfiguration {
 
@@ -23,7 +25,7 @@ public class ClienteConfiguration {
     @Bean
     public IntegrationFlow findById() {
         return IntegrationFlow.from("clienteFindById")
-                .handle(Http.outboundGateway(m -> "http://localhost:8085/cliente?cpf=" + m.getPayload())
+                .handle(Http.outboundGateway(m -> CLIENTE_BASE_URL.concat("?cpf=" + m.getPayload()))
                         .httpMethod(HttpMethod.GET)
                         .expectedResponseType(ClienteDTO.class)
                         .errorHandler(new ClienteResponseErrorHandler())
@@ -34,7 +36,7 @@ public class ClienteConfiguration {
     @Bean
     public IntegrationFlow save() {
         return IntegrationFlow.from("clienteSave")
-                .handle(Http.outboundGateway("http://localhost:8085/cliente")
+                .handle(Http.outboundGateway(CLIENTE_BASE_URL)
                         .httpMethod(HttpMethod.POST)
                         .expectedResponseType(ClienteDTO.class)
                         .extractPayload(true)
@@ -46,7 +48,7 @@ public class ClienteConfiguration {
     @Bean
     public IntegrationFlow update() {
         return IntegrationFlow.from("clienteUpdate")
-                .handle(Http.outboundGateway("http://localhost:8085/cliente/{id}")
+                .handle(Http.outboundGateway(CLIENTE_BASE_URL.concat("/{id}"))
                         .httpMethod(HttpMethod.PUT)
                         .expectedResponseType(ClienteDTO.class)
                         .extractPayload(true)
