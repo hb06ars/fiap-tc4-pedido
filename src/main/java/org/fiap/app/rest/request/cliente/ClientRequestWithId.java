@@ -1,4 +1,4 @@
-package org.fiap.app.rest.request;
+package org.fiap.app.rest.request.cliente;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GenericRequestWithId {
+public class ClientRequestWithId {
     private Long id;
     private ClienteRequest payload;
 

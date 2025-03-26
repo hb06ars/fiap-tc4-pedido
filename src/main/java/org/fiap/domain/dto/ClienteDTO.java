@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.fiap.app.rest.request.ClienteRequest;
+import org.fiap.app.rest.request.cliente.ClienteRequest;
 
 import java.time.LocalDate;
 

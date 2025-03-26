@@ -1,6 +1,6 @@
 package org.fiap.app.gateway;
 
-import org.fiap.app.rest.request.ClienteRequest;
+import org.fiap.app.rest.request.cliente.ClienteRequest;
 import org.fiap.domain.dto.ClienteDTO;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;

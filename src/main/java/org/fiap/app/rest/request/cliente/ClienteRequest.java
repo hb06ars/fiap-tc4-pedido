@@ -1,4 +1,4 @@
-package org.fiap.app.rest.request;
+package org.fiap.app.rest.request.cliente;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

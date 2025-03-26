@@ -2,7 +2,7 @@ package org.fiap.app.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.gateway.ClienteGateway;
-import org.fiap.app.rest.request.ClienteRequest;
+import org.fiap.app.rest.request.cliente.ClienteRequest;
 import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.infra.exceptions.GlobalException;
 import org.springframework.messaging.support.GenericMessage;
