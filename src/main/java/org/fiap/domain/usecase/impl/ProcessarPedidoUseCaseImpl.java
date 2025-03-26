@@ -36,9 +36,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
         preenchendoProdutoId(produtos, pedidoDTO);
 
         if (baixaEstoqueEfetuada(pedidoDTO)) {
-            System.out.println(totalCompra);
-            System.out.println(produtos);
-            System.out.println(cliente);
+            log.info("SALVAR PEDIDO E ITENS DO PEDIDO.");
         }
 
     }
