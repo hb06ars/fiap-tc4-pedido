@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fiap.domain.dto.enums.StatusPagamentoEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PedidoDTO {
     private String numeroCartaoCredito;
     private StatusPagamentoEnum status;
     private List<ItensPedidoDTO> itensPedidoList;
+    private BigDecimal totalCompra;
     private LocalDateTime dtPedido;
     private LocalDateTime dtProcessamento;
     private LocalDateTime dtAtualizacao;

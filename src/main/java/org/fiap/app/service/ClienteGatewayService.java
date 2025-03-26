@@ -24,7 +24,8 @@ public class ClienteGatewayService {
         try {
             return gateway.findByCpf(new GenericMessage<>(cpf.trim()));
         } catch (ResourceAccessException ex) {
-            throw new GlobalException(API_INDISPONIVEL);
+            log.error(API_INDISPONIVEL);
+            return null;
         }
     }
 }

@@ -4,8 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.service.ClienteGatewayService;
 import org.fiap.app.service.ProdutoGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
+import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -21,9 +25,28 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     @Override
     public void execute(PedidoDTO pedidoDTO) {
-        var resultado = clienteGatewayService.findByCpf("22553344888");
-        var resultadoB = produtoGatewayService.findBySku("123456789");
-        System.out.println(resultado.getCpf());
-        System.out.println(resultadoB.getSku());
+        List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
+        BigDecimal totalCompra = calcularTotal(produtos);
+
+        System.out.println(totalCompra);
+        System.out.println(produtos);
+
+        var clienteDTO = clienteGatewayService.findByCpf("22553344888");
+
+
+    }
+
+    private List<ProdutoDTO> buscarProdutos(PedidoDTO pedidoDTO) {
+        return pedidoDTO.getItensPedidoList()
+                .stream()
+                .map(item -> produtoGatewayService.findBySku(item.getSkuProduto()))
+                .toList();
+    }
+
+    private BigDecimal calcularTotal(List<ProdutoDTO> produtos) {
+        return produtos
+                .stream()
+                .map(item -> produtoGatewayService.findBySku(item.getSku()).getPreco())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -25,7 +25,8 @@ public class ProdutoGatewayService {
         try {
             return gateway.findBySku(new GenericMessage<>(sku.trim()));
         } catch (ResourceAccessException ex) {
-            throw new GlobalException(API_INDISPONIVEL);
+            log.error(API_INDISPONIVEL);
+            return null;
         }
     }
 }
