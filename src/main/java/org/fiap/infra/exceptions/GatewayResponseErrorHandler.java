@@ -9,7 +9,7 @@ import java.io.IOException;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-public class ClienteResponseErrorHandler implements ResponseErrorHandler {
+public class GatewayResponseErrorHandler implements ResponseErrorHandler {
 
     @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {

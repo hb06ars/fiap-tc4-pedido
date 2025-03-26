@@ -3,6 +3,7 @@ package org.fiap.app.service;
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.domain.dto.ClienteDTO;
+import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.infra.exceptions.GlobalException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,17 @@ import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
 
 @Service
 @Slf4j
-public class ClienteGatewayService {
+public class ProdutoGatewayService {
 
     private final GatewayApi gateway;
 
-    public ClienteGatewayService(GatewayApi gateway) {
+    public ProdutoGatewayService(GatewayApi gateway) {
         this.gateway = gateway;
     }
 
-    public ClienteDTO findByCpf(String cpf) {
+    public ProdutoDTO findBySku(String sku) {
         try {
-            return gateway.findByCpf(new GenericMessage<>(cpf.trim()));
+            return gateway.findBySku(new GenericMessage<>(sku.trim()));
         } catch (ResourceAccessException ex) {
             throw new GlobalException(API_INDISPONIVEL);
         }
