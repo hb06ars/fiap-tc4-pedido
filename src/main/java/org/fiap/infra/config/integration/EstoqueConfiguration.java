@@ -10,7 +10,7 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
-import static org.fiap.domain.util.UrlConstants.ESTQOUE_BASE_URL;
+import static org.fiap.domain.util.UrlConstants.ESTOQUE_BASE_URL;
 
 @Configuration
 public class EstoqueConfiguration {
@@ -25,7 +25,18 @@ public class EstoqueConfiguration {
     @Bean
     public IntegrationFlow findByProdutoId() {
         return IntegrationFlow.from("estoqueFindByIdProduto")
-                .handle(Http.outboundGateway(m -> ESTQOUE_BASE_URL.concat("?produtoId=" + m.getPayload()))
+                .handle(Http.outboundGateway(m -> ESTOQUE_BASE_URL.concat("?produtoId=" + m.getPayload()))
+                        .httpMethod(HttpMethod.GET)
+                        .expectedResponseType(EstoqueDTO.class)
+                        .errorHandler(new GatewayResponseErrorHandler())
+                )
+                .log().bridge().get();
+    }
+
+    @Bean
+    public IntegrationFlow estoqueUpdateByIdProduto() {
+        return IntegrationFlow.from("estoqueUpdateByIdProduto")
+                .handle(Http.outboundGateway(m -> ESTOQUE_BASE_URL.concat("?produtoId=" + m.getPayload()))
                         .httpMethod(HttpMethod.GET)
                         .expectedResponseType(EstoqueDTO.class)
                         .errorHandler(new GatewayResponseErrorHandler())
