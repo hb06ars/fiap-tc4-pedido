@@ -23,8 +23,8 @@ public class ClienteConfiguration {
     }
 
     @Bean
-    public IntegrationFlow findById() {
-        return IntegrationFlow.from("clienteFindById")
+    public IntegrationFlow findByCpf() {
+        return IntegrationFlow.from("clienteFindByCpf")
                 .handle(Http.outboundGateway(m -> CLIENTE_BASE_URL.concat("?cpf=" + m.getPayload()))
                         .httpMethod(HttpMethod.GET)
                         .expectedResponseType(ClienteDTO.class)
@@ -33,28 +33,4 @@ public class ClienteConfiguration {
                 .log().bridge().get();
     }
 
-    @Bean
-    public IntegrationFlow save() {
-        return IntegrationFlow.from("clienteSave")
-                .handle(Http.outboundGateway(CLIENTE_BASE_URL)
-                        .httpMethod(HttpMethod.POST)
-                        .expectedResponseType(ClienteDTO.class)
-                        .extractPayload(true)
-                        .errorHandler(new ClienteResponseErrorHandler())
-                )
-                .log().bridge().get();
-    }
-
-    @Bean
-    public IntegrationFlow update() {
-        return IntegrationFlow.from("clienteUpdate")
-                .handle(Http.outboundGateway(CLIENTE_BASE_URL.concat("/{id}"))
-                        .httpMethod(HttpMethod.PUT)
-                        .expectedResponseType(ClienteDTO.class)
-                        .extractPayload(true)
-                        .uriVariable("id", "payload.id")
-                        .errorHandler(new ClienteResponseErrorHandler())
-                )
-                .log().bridge().get();
-    }
 }

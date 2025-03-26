@@ -2,7 +2,6 @@ package org.fiap.app.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.gateway.ClienteGateway;
-import org.fiap.app.rest.request.cliente.ClienteRequest;
 import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.infra.exceptions.GlobalException;
 import org.springframework.messaging.support.GenericMessage;
@@ -24,24 +23,6 @@ public class ClienteGatewayService {
     public ClienteDTO findByCpf(String cpf) {
         try {
             return gateway.findByCpf(new GenericMessage<>(cpf.trim()));
-        } catch (ResourceAccessException ex) {
-            throw new GlobalException(API_INDISPONIVEL);
-        }
-    }
-
-    public ClienteDTO save(ClienteRequest request) {
-        try {
-            return gateway.save(new GenericMessage<>(request));
-        } catch (ResourceAccessException ex) {
-            throw new GlobalException(API_INDISPONIVEL);
-        }
-    }
-
-    public ClienteDTO update(Long id, ClienteRequest request) {
-        try {
-            request.setId(id);
-            return gateway.update(new GenericMessage<>(request));
-
         } catch (ResourceAccessException ex) {
             throw new GlobalException(API_INDISPONIVEL);
         }

@@ -9,13 +9,7 @@ import org.springframework.messaging.Message;
 @MessagingGateway
 public interface ClienteGateway {
 
-    @Gateway(requestChannel = "clienteFindById", requestTimeout = 5000)
+    @Gateway(requestChannel = "clienteFindByCpf", requestTimeout = 5000)
     ClienteDTO findByCpf(Message<String> cpf);
-
-    @Gateway(requestChannel = "clienteSave", requestTimeout = 5000)
-    ClienteDTO save(Message<ClienteRequest> request);
-
-    @Gateway(requestChannel = "clienteUpdate", requestTimeout = 5000)
-    ClienteDTO update(Message<ClienteRequest> request);
 
 }
