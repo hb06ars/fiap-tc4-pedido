@@ -32,7 +32,8 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     public void execute(PedidoDTO pedidoDTO) {
         ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
-        BigDecimal totalCompra = calcularTotal(produtos);
+        BigDecimal totalCompra = calcularTotal(pedidoDTO, produtos);
+        preenchendoProdutoId(produtos, pedidoDTO);
 
         if (baixaEstoqueEfetuada(pedidoDTO)) {
             System.out.println(totalCompra);
@@ -63,10 +64,10 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private boolean validarEstoque(PedidoDTO pedidoDTO) {
-        var estoqueInvalido = pedidoDTO.getItensPedidoList().stream().anyMatch(
-                item -> (estoqueGatewayService
-                        .findByIdProduto(item.getProdutoId()).getQuantidade() - item.getQuantidade()) < 0
-        );
+        var estoqueInvalido = pedidoDTO.getItensPedidoList()
+                .stream()
+                .anyMatch(item -> item.getQuantidade() < 0);
+
         if (estoqueInvalido) {
             log.error("Estoque inválido.");
             return false;
@@ -76,13 +77,10 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private List<ProdutoDTO> buscarProdutos(PedidoDTO pedidoDTO) {
-        var produtos = pedidoDTO.getItensPedidoList()
+        return pedidoDTO.getItensPedidoList()
                 .stream()
                 .map(item -> produtoGatewayService.findBySku(item.getSkuProduto()))
                 .toList();
-
-        preenchendoProdutoId(produtos, pedidoDTO);
-        return produtos;
     }
 
     private void preenchendoProdutoId(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
@@ -94,13 +92,28 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                     item.setQuantidade(estoqueGatewayService
                             .findByIdProduto(produto.getId()).getQuantidade() - item.getQuantidade()
                     );
+                    pedidoDTO.setTotalCompra(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
                 }));
     }
 
-    private BigDecimal calcularTotal(List<ProdutoDTO> produtos) {
-        return produtos
-                .stream()
-                .map(item -> produtoGatewayService.findBySku(item.getSku()).getPreco())
+    private BigDecimal calcularTotal(PedidoDTO pedidoDTO, List<ProdutoDTO> produtos) {
+        return produtos.stream()
+                .map(item -> {
+                    BigDecimal precoUnitario = produtoGatewayService.findBySku(item.getSku()).getPreco();
+                    return precoUnitario
+                            .multiply(BigDecimal.valueOf(
+                                    pedidoDTO.getItensPedidoList()
+                                            .stream()
+                                            .filter(itemPedido ->
+                                                    item.getSku().equals(itemPedido.getSkuProduto()))
+                                            .findFirst()
+                                            .orElseThrow(() -> {
+                                                log.error("Produto não encontrado no pedido");
+                                                return null;
+                                            })
+                                            .getQuantidade()));
+                })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 }
