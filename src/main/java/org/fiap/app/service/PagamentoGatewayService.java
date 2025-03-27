@@ -21,6 +21,7 @@ public class PagamentoGatewayService {
 
     public PagamentoDTO save(PagamentoDTO request) {
         try {
+            log.info("Efetuando requisição para API de Pagamentos.");
             return gateway.pagamentoSave(new GenericMessage<>(request));
         } catch (ResourceAccessException ex) {
             log.error(API_PAGAMENTO_INDISPONIVEL);

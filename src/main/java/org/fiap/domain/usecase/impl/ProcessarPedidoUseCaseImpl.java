@@ -75,6 +75,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                             .build();
                     try {
                         pagamentoGatewayService.save(pagamento);
+                        log.info("Resposta de pagamento finalizada.");
                     } catch (Exception e) {
                         log.error(API_PAGAMENTO_INDISPONIVEL);
                         cancelarBaixaEstoqueUseCase.execute(pagamento);
