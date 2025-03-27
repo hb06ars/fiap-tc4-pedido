@@ -11,6 +11,7 @@ import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.mapper.PedidoMapper;
 import org.fiap.domain.usecase.CalcularTotalPedidoUseCase;
+import org.fiap.domain.usecase.CancelarBaixaEstoqueUseCase;
 import org.fiap.domain.usecase.EfetuarBaixaEstoqueUseCase;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
 import org.fiap.domain.usecase.SalvarPedidoUseCase;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
 
 @Component
 @Slf4j
@@ -33,16 +36,18 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     private final ValidarEstoqueUseCase validarEstoqueUseCase;
     private final EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase;
     private final CalcularTotalPedidoUseCase calcularTotalPedidoUseCase;
+    private final CancelarBaixaEstoqueUseCase cancelarBaixaEstoqueUseCase;
     private final SalvarPedidoUseCase salvarPedidoUseCase;
     private final PedidoMapper pedidoMapper;
 
-    public ProcessarPedidoUseCaseImpl(ClienteGatewayService clienteGatewayService, ProdutoGatewayService produtoGatewayService, EstoqueGatewayService estoqueGatewayService, PagamentoGatewayService pagamentoGatewayService, ValidarEstoqueUseCase validarEstoqueUseCase, EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase, CalcularTotalPedidoUseCase calcularTotalPedidoUseCase, SalvarPedidoUseCase salvarPedidoUseCase, PedidoMapper pedidoMapper) {
+    public ProcessarPedidoUseCaseImpl(ClienteGatewayService clienteGatewayService, ProdutoGatewayService produtoGatewayService, EstoqueGatewayService estoqueGatewayService, PagamentoGatewayService pagamentoGatewayService, ValidarEstoqueUseCase validarEstoqueUseCase, EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase, CalcularTotalPedidoUseCase calcularTotalPedidoUseCase, CancelarBaixaEstoqueUseCase cancelarBaixaEstoqueUseCase, SalvarPedidoUseCase salvarPedidoUseCase, PedidoMapper pedidoMapper) {
         this.clienteGatewayService = clienteGatewayService;
         this.produtoGatewayService = produtoGatewayService;
         this.pagamentoGatewayService = pagamentoGatewayService;
         this.validarEstoqueUseCase = validarEstoqueUseCase;
         this.efetuarBaixaEstoqueUseCase = efetuarBaixaEstoqueUseCase;
         this.calcularTotalPedidoUseCase = calcularTotalPedidoUseCase;
+        this.cancelarBaixaEstoqueUseCase = cancelarBaixaEstoqueUseCase;
         this.salvarPedidoUseCase = salvarPedidoUseCase;
         this.pedidoMapper = pedidoMapper;
     }
@@ -62,11 +67,17 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 if (pedidoSalvo.getId() != null) {
                     log.info("Efetuando pagamento.");
 
-                    pagamentoGatewayService.save(PagamentoDTO.builder()
+                    PagamentoDTO pagamento = PagamentoDTO.builder()
                             .pedidoId(pedidoSalvo.getId())
                             .dtPagamento(LocalDateTime.now())
                             .dtAtualizacao(LocalDateTime.now())
-                            .build());
+                            .build();
+                    try {
+                        pagamentoGatewayService.save(pagamento);
+                    } catch (Exception e) {
+                        cancelarBaixaEstoqueUseCase.execute(pagamento);
+                        log.error(API_INDISPONIVEL);
+                    }
                 }
             }
         } else {
