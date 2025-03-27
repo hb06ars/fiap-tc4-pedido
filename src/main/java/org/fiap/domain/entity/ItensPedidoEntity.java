@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fiap.domain.dto.ItensPedidoDTO;
 
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "itens_pedido")
 public class ItensPedidoEntity implements Serializable {
 
