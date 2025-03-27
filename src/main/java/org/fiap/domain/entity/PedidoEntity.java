@@ -10,8 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.enums.StatusPagamentoEnum;
@@ -22,8 +22,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "pedido")
 public class PedidoEntity implements Serializable {
 
