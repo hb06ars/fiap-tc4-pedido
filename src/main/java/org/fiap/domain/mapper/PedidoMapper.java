@@ -40,7 +40,7 @@ public class PedidoMapper {
                 .id(pedidoDTO.getId())
                 .numeroCartaoCredito(pedidoDTO.getNumeroCartaoCredito())
                 .clienteId(pedidoDTO.getClienteId())
-                .status(pedidoDTO.getStatus())
+                .status(pedidoDTO.getStatus().getDescricao())
                 .dtPedido(pedidoDTO.getDtPedido())
                 .dtProcessamento(pedidoDTO.getDtProcessamento())
                 .dtAtualizacao(pedidoDTO.getDtProcessamento())

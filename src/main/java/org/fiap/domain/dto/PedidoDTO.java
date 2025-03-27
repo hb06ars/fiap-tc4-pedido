@@ -24,7 +24,7 @@ public class PedidoDTO {
     private Long id;
     private Long clienteId;
     private String numeroCartaoCredito;
-    private StatusPagamentoEnum status;
+    private StatusPagamentoEnum status = StatusPagamentoEnum.ABERTO;
     private List<ItensPedidoDTO> itensPedidoList;
     private BigDecimal totalCompra;
     private LocalDateTime dtPedido;
@@ -36,7 +36,7 @@ public class PedidoDTO {
         this.id = entity.getId();
         this.clienteId = entity.getClienteId();
         this.numeroCartaoCredito = entity.getNumeroCartaoCredito();
-        this.status = entity.getStatus();
+        this.status = StatusPagamentoEnum.valueOf(entity.getStatus());
         this.dtPedido = entity.getDtPedido();
         this.dtProcessamento = entity.getDtProcessamento();
         this.dtAtualizacao = entity.getDtAtualizacao();

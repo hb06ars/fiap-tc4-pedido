@@ -46,7 +46,7 @@ public class PedidoEntity implements Serializable {
     private String numeroCartaoCredito;
 
     @Column
-    private StatusPagamentoEnum status;
+    private String status;
 
     @Column(name = "dt_pedido")
     private LocalDateTime dtPedido;
@@ -62,7 +62,7 @@ public class PedidoEntity implements Serializable {
         this.id = dto.getId();
         this.clienteId = dto.getClienteId();
         this.numeroCartaoCredito = dto.getNumeroCartaoCredito();
-        this.status = dto.getStatus();
+        this.status = dto.getStatus().getDescricao();
         this.dtPedido = dto.getDtPedido();
         this.dtProcessamento = dto.getDtProcessamento();
         this.dtAtualizacao = dto.getDtAtualizacao();
