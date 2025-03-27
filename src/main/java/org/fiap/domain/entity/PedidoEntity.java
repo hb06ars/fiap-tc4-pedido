@@ -65,6 +65,16 @@ public class PedidoEntity implements Serializable {
         this.numeroCartaoCredito = dto.getNumeroCartaoCredito();
         this.status = dto.getStatus();
         this.dtPedido = dto.getDtPedido();
+        this.itensPedidoEntity = dto.getItensPedidoList()
+                .stream()
+                .map(item -> ItensPedidoEntity.builder()
+                        .id(item.getId())
+                        .pedidoId(item.getPedidoId())
+                        .dtAtualizacao(item.getDtAtualizacao())
+                        .quantidade(item.getQuantidade())
+                        .skuProduto(item.getSkuProduto())
+                        .build())
+                .toList();
         this.dtProcessamento = dto.getDtProcessamento();
         this.dtAtualizacao = dto.getDtAtualizacao();
     }
