@@ -35,6 +35,12 @@ public class PedidoMapper {
     public PedidoEntity convertEntity(PedidoDTO pedidoDTO) {
         return PedidoEntity.builder()
                 .id(pedidoDTO.getId())
+                .numeroCartaoCredito(pedidoDTO.getNumeroCartaoCredito())
+                .clienteId(pedidoDTO.getClienteId())
+                .status(pedidoDTO.getStatus())
+                .dtPedido(pedidoDTO.getDtPedido())
+                .dtProcessamento(pedidoDTO.getDtProcessamento())
+                .dtAtualizacao(pedidoDTO.getDtProcessamento())
                 .itensPedidoEntity(pedidoDTO.getItensPedidoList()
                         .stream().map(item -> ItensPedidoEntity.builder()
                                 .id(item.getId())

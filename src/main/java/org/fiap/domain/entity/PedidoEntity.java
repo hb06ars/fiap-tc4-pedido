@@ -67,6 +67,8 @@ public class PedidoEntity implements Serializable {
         this.numeroCartaoCredito = dto.getNumeroCartaoCredito();
         this.status = dto.getStatus();
         this.dtPedido = dto.getDtPedido();
+        this.dtProcessamento = dto.getDtProcessamento();
+        this.dtAtualizacao = dto.getDtAtualizacao();
         this.itensPedidoEntity = dto.getItensPedidoList()
                 .stream()
                 .map(item -> ItensPedidoEntity.builder()
@@ -77,7 +79,5 @@ public class PedidoEntity implements Serializable {
                         .skuProduto(item.getSkuProduto())
                         .build())
                 .toList();
-        this.dtProcessamento = dto.getDtProcessamento();
-        this.dtAtualizacao = dto.getDtAtualizacao();
     }
 }

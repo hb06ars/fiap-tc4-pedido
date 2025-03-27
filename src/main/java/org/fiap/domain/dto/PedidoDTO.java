@@ -38,6 +38,8 @@ public class PedidoDTO {
         this.numeroCartaoCredito = entity.getNumeroCartaoCredito();
         this.status = entity.getStatus();
         this.dtPedido = entity.getDtPedido();
+        this.dtProcessamento = entity.getDtProcessamento();
+        this.dtAtualizacao = entity.getDtAtualizacao();
         this.itensPedidoList = entity.getItensPedidoEntity()
                 .stream()
                 .map(item -> ItensPedidoDTO.builder()
@@ -48,7 +50,5 @@ public class PedidoDTO {
                         .skuProduto(item.getSkuProduto())
                         .build())
                 .toList();
-        this.dtProcessamento = entity.getDtProcessamento();
-        this.dtAtualizacao = entity.getDtAtualizacao();
     }
 }
