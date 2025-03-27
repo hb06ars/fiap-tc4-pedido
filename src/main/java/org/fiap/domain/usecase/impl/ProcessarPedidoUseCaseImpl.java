@@ -17,18 +17,15 @@ import org.fiap.domain.usecase.ProcessarPedidoUseCase;
 import org.fiap.domain.usecase.SalvarPedidoUseCase;
 import org.fiap.domain.usecase.ValidarEstoqueUseCase;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
 import static org.fiap.domain.util.StringConstants.API_PAGAMENTO_INDISPONIVEL;
 
 @Component
 @Slf4j
-@Transactional
 public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     private final ClienteGatewayService clienteGatewayService;

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
-@Transactional
 public class SalvarPedidoUseCaseImpl implements SalvarPedidoUseCase {
 
     private final PedidoRepository pedidoRepository;
