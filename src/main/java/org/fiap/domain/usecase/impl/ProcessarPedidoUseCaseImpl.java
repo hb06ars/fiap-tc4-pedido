@@ -16,6 +16,7 @@ import org.fiap.domain.usecase.ProcessarPedidoUseCase;
 import org.fiap.domain.usecase.SalvarPedidoUseCase;
 import org.fiap.domain.usecase.ValidarEstoqueUseCase;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@Transactional
 public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     private final ClienteGatewayService clienteGatewayService;
@@ -48,25 +50,28 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     @Override
     public void execute(PedidoDTO pedidoDTO) {
         ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
-        List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
-        BigDecimal totalCompra = calcularTotalPedidoUseCase.execute(pedidoDTO, produtos);
-        pedidoDTO.setTotalCompra(totalCompra);
+        if (cliente != null) {
+            List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
+            BigDecimal totalCompra = calcularTotalPedidoUseCase.execute(pedidoDTO, produtos);
+            pedidoDTO.setTotalCompra(totalCompra);
 
-        PedidoDTO baixaEstoque = pedidoMapper.estoqueBaixaDto(produtos, new PedidoDTO(pedidoDTO));
-        if (baixaEstoqueEfetuada(baixaEstoque)) {
-            log.info("Salvando o pedido na base de dados.");
-            PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
-            if (pedidoSalvo.getId() != null) {
-                log.info("Efetuando pagamento.");
+            PedidoDTO baixaEstoque = pedidoMapper.estoqueBaixaDto(produtos, new PedidoDTO(pedidoDTO));
+            if (baixaEstoqueEfetuada(baixaEstoque)) {
+                log.info("Salvando o pedido na base de dados.");
+                PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
+                if (pedidoSalvo.getId() != null) {
+                    log.info("Efetuando pagamento.");
 
-                pagamentoGatewayService.save(PagamentoDTO.builder()
-                        .pedidoId(pedidoSalvo.getId())
-                        .dtPagamento(LocalDateTime.now())
-                        .dtAtualizacao(LocalDateTime.now())
-                        .build());
+                    pagamentoGatewayService.save(PagamentoDTO.builder()
+                            .pedidoId(pedidoSalvo.getId())
+                            .dtPagamento(LocalDateTime.now())
+                            .dtAtualizacao(LocalDateTime.now())
+                            .build());
+                }
             }
+        } else {
+            log.error("Cliente inexistente.");
         }
-
     }
 
     private boolean baixaEstoqueEfetuada(PedidoDTO baixaEstoque) {
