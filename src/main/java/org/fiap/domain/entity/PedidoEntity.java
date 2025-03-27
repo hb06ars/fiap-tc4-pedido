@@ -18,6 +18,7 @@ import org.fiap.domain.enums.StatusPagamentoEnum;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,6 +42,9 @@ public class PedidoEntity implements Serializable {
     @Size(min = 13, max = 19, message = "O número do cartão deve ter entre 13 e 19 dígitos.")
     @Pattern(regexp = "\\d+", message = "O número do cartão deve conter apenas dígitos.")
     private String numeroCartaoCredito;
+
+    @Column
+    private List<ItensPedidoEntity> itensPedidoEntity;
 
     @Column
     private StatusPagamentoEnum status;
