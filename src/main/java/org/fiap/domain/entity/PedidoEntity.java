@@ -42,10 +42,16 @@ public class PedidoEntity implements Serializable {
     @Pattern(regexp = "\\d+", message = "O número do cartão deve conter apenas dígitos.")
     private String numeroCartaoCredito;
 
+    @Column
     private StatusPagamentoEnum status;
 
+    @Column
     private LocalDateTime dtPedido;
+
+    @Column
     private LocalDateTime dtProcessamento;
+
+    @Column
     private LocalDateTime dtAtualizacao;
 
 
