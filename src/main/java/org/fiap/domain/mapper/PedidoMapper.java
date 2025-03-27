@@ -44,14 +44,6 @@ public class PedidoMapper {
                 .dtPedido(pedidoDTO.getDtPedido())
                 .dtProcessamento(pedidoDTO.getDtProcessamento())
                 .dtAtualizacao(pedidoDTO.getDtProcessamento())
-                .itensPedidoEntity(pedidoDTO.getItensPedidoList()
-                        .stream().map(item -> ItensPedidoEntity.builder()
-                                .id(item.getId())
-                                .pedidoId(item.getPedidoId())
-                                .dtAtualizacao(item.getDtAtualizacao())
-                                .quantidade(item.getQuantidade())
-                                .skuProduto(item.getSkuProduto())
-                                .build()).toList())
                 .build();
     }
 }

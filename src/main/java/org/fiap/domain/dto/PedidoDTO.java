@@ -40,16 +40,6 @@ public class PedidoDTO {
         this.dtPedido = entity.getDtPedido();
         this.dtProcessamento = entity.getDtProcessamento();
         this.dtAtualizacao = entity.getDtAtualizacao();
-        this.itensPedidoList = entity.getItensPedidoEntity()
-                .stream()
-                .map(item -> ItensPedidoDTO.builder()
-                        .id(item.getId())
-                        .pedidoId(item.getPedidoId())
-                        .dtAtualizacao(item.getDtAtualizacao())
-                        .quantidade(item.getQuantidade())
-                        .skuProduto(item.getSkuProduto())
-                        .build())
-                .toList();
     }
 
     public PedidoDTO(PedidoDTO pedidoDTO) {

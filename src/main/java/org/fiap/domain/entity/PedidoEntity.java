@@ -35,29 +35,26 @@ public class PedidoEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "cliente_id", nullable = false, length = 255)
     @Positive(message = "O ID do cliente não pode ser menor que 0. Por favor, forneça um valor.")
     private Long clienteId;
 
-    @Column(nullable = false, length = 19)
+    @Column(name = "numero_cartao_credito", nullable = false, length = 19)
     @NotBlank(message = "O número do cartão não pode estar em branco. Por favor, forneça um valor.")
     @Size(min = 13, max = 19, message = "O número do cartão deve ter entre 13 e 19 dígitos.")
     @Pattern(regexp = "\\d+", message = "O número do cartão deve conter apenas dígitos.")
     private String numeroCartaoCredito;
 
     @Column
-    private List<ItensPedidoEntity> itensPedidoEntity;
-
-    @Column
     private StatusPagamentoEnum status;
 
-    @Column
+    @Column(name = "dt_pedido")
     private LocalDateTime dtPedido;
 
-    @Column
+    @Column(name = "dt_processamento")
     private LocalDateTime dtProcessamento;
 
-    @Column
+    @Column(name = "dt_atualizacao")
     private LocalDateTime dtAtualizacao;
 
 
@@ -69,15 +66,5 @@ public class PedidoEntity implements Serializable {
         this.dtPedido = dto.getDtPedido();
         this.dtProcessamento = dto.getDtProcessamento();
         this.dtAtualizacao = dto.getDtAtualizacao();
-        this.itensPedidoEntity = dto.getItensPedidoList()
-                .stream()
-                .map(item -> ItensPedidoEntity.builder()
-                        .id(item.getId())
-                        .pedidoId(item.getPedidoId())
-                        .dtAtualizacao(item.getDtAtualizacao())
-                        .quantidade(item.getQuantidade())
-                        .skuProduto(item.getSkuProduto())
-                        .build())
-                .toList();
     }
 }
