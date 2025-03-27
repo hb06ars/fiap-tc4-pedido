@@ -1,7 +1,7 @@
 package org.fiap.domain.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import org.fiap.app.service.EstoqueGatewayService;
+import org.fiap.app.service.gateway.EstoqueGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.entity.PedidoEntity;

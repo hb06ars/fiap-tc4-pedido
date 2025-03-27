@@ -1,10 +1,10 @@
 package org.fiap.domain.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.fiap.app.service.ClienteGatewayService;
-import org.fiap.app.service.EstoqueGatewayService;
-import org.fiap.app.service.PagamentoGatewayService;
-import org.fiap.app.service.ProdutoGatewayService;
+import org.fiap.app.service.gateway.ClienteGatewayService;
+import org.fiap.app.service.gateway.EstoqueGatewayService;
+import org.fiap.app.service.gateway.PagamentoGatewayService;
+import org.fiap.app.service.gateway.ProdutoGatewayService;
 import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.domain.dto.PagamentoDTO;
 import org.fiap.domain.dto.PedidoDTO;

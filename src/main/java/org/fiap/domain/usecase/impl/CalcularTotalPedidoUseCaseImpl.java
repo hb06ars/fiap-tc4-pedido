@@ -1,7 +1,7 @@
 package org.fiap.domain.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.fiap.app.service.ProdutoGatewayService;
+import org.fiap.app.service.gateway.ProdutoGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.usecase.CalcularTotalPedidoUseCase;

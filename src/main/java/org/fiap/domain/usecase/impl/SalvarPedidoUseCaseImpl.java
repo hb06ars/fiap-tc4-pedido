@@ -1,38 +1,38 @@
 package org.fiap.domain.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.fiap.app.service.postgres.ItensPedidoService;
+import org.fiap.app.service.postgres.PedidoService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.entity.ItensPedidoEntity;
 import org.fiap.domain.entity.PedidoEntity;
 import org.fiap.domain.mapper.PedidoMapper;
 import org.fiap.domain.usecase.SalvarPedidoUseCase;
-import org.fiap.infra.repository.ItensPedidoRepository;
-import org.fiap.infra.repository.PedidoRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
 public class SalvarPedidoUseCaseImpl implements SalvarPedidoUseCase {
 
-    private final PedidoRepository pedidoRepository;
-    private final ItensPedidoRepository itensPedidoRepository;
+    private final PedidoService pedidoService;
+    private final ItensPedidoService itensPedidoService;
     private final PedidoMapper pedidoMapper;
 
-    public SalvarPedidoUseCaseImpl(PedidoRepository pedidoRepository, ItensPedidoRepository itensPedidoRepository, PedidoMapper pedidoMapper) {
-        this.pedidoRepository = pedidoRepository;
-        this.itensPedidoRepository = itensPedidoRepository;
+    public SalvarPedidoUseCaseImpl(PedidoService pedidoService, ItensPedidoService itensPedidoService, PedidoMapper pedidoMapper) {
+        this.pedidoService = pedidoService;
+        this.itensPedidoService = itensPedidoService;
         this.pedidoMapper = pedidoMapper;
     }
+
 
     @Override
     public PedidoDTO execute(PedidoDTO pedidoDTO) {
         PedidoEntity pedidoEntity = pedidoMapper.convertEntity(pedidoDTO);
-        var result = pedidoRepository.save(pedidoEntity);
+        var result = pedidoService.save(pedidoEntity);
         if (result.getId() != null) {
             pedidoDTO.setId(result.getId());
             pedidoDTO.getItensPedidoList().forEach(item -> {
-                var itemEntity = itensPedidoRepository.save(ItensPedidoEntity.builder()
+                var itemEntity = itensPedidoService.save(ItensPedidoEntity.builder()
                         .pedidoId(result.getId())
                         .skuProduto(item.getSkuProduto())
                         .quantidade(item.getQuantidade())
