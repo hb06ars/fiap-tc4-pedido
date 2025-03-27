@@ -6,8 +6,9 @@ import org.fiap.app.service.gateway.EstoqueGatewayService;
 import org.fiap.app.service.gateway.ProdutoGatewayService;
 import org.fiap.app.service.postgres.ItensPedidoService;
 import org.fiap.app.service.postgres.PedidoService;
+import org.fiap.domain.dto.ItensPedidoDTO;
 import org.fiap.domain.dto.PagamentoDTO;
-import org.fiap.domain.entity.ItensPedidoEntity;
+import org.fiap.domain.entity.PedidoEntity;
 import org.fiap.domain.enums.StatusPagamentoEnum;
 import org.fiap.domain.usecase.CancelarBaixaEstoqueUseCase;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,11 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
 
     @Override
     public void execute(PagamentoDTO pagamentoDTO) {
-        List<ItensPedidoEntity> itensPedido = itensPedidoService.findByPedidoId(pagamentoDTO.getPedidoId());
+        List<ItensPedidoDTO> itensPedido = itensPedidoService
+                .findByPedidoId(pagamentoDTO.getPedidoId())
+                .stream().map(ItensPedidoDTO::new)
+                .toList();
+
         itensPedido.forEach(item -> {
             var idProduto = produtoGatewayService.findBySku(item.getSkuProduto()).getId();
             var estoqueAtual = estoqueGatewayService.findByIdProduto(idProduto).getQuantidade();
@@ -44,10 +49,10 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
                             .quantidade(item.getQuantidade() + estoqueAtual)
                             .build());
         });
-        var pedido = pedidoService.findById(pagamentoDTO.getPedidoId()).orElse(null);
+        var pedido = pedidoService.findById(pagamentoDTO.getPedidoId());
         if (Objects.nonNull(pedido)) {
-            pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API.getDescricao());
-            pedidoService.save(pedido);
+            pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API);
+            pedidoService.save(new PedidoEntity(pedido));
         }
         log.error("Efetuando rollback do Estoque");
     }
