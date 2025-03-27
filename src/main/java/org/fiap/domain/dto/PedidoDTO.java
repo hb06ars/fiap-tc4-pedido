@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fiap.domain.entity.PedidoEntity;
 import org.fiap.domain.enums.StatusPagamentoEnum;
 
 import java.math.BigDecimal;
@@ -30,4 +31,24 @@ public class PedidoDTO {
     private LocalDateTime dtProcessamento;
     private LocalDateTime dtAtualizacao;
 
+
+    public PedidoDTO(PedidoEntity entity) {
+        this.id = entity.getId();
+        this.clienteId = entity.getClienteId();
+        this.numeroCartaoCredito = entity.getNumeroCartaoCredito();
+        this.status = entity.getStatus();
+        this.dtPedido = entity.getDtPedido();
+        this.itensPedidoList = entity.getItensPedidoEntity()
+                .stream()
+                .map(item -> ItensPedidoDTO.builder()
+                        .id(item.getId())
+                        .pedidoId(item.getPedidoId())
+                        .dtAtualizacao(item.getDtAtualizacao())
+                        .quantidade(item.getQuantidade())
+                        .skuProduto(item.getSkuProduto())
+                        .build())
+                .toList();
+        this.dtProcessamento = entity.getDtProcessamento();
+        this.dtAtualizacao = entity.getDtAtualizacao();
+    }
 }
