@@ -31,11 +31,11 @@ public class ItensPedidoEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(name="pedido_id", nullable = false, length = 255)
     @Positive(message = "O ID do Pedido não pode ser menor que 0. Por favor, forneça um valor.")
     private Long pedidoId;
 
-    @Column(nullable = false, length = 255)
+    @Column(name="sku_produto", nullable = false, length = 255)
     @NotEmpty(message = "O SKU do Produto não pode servazio. Por favor, forneça um valor.")
     private String skuProduto;
 
@@ -43,7 +43,7 @@ public class ItensPedidoEntity implements Serializable {
     @Positive(message = "A quantidade não pode ser menor que 0. Por favor, forneça um valor.")
     private Integer quantidade;
 
-    @Column
+    @Column(name="dt_atualizacao")
     private LocalDateTime dtAtualizacao;
 
     public ItensPedidoEntity(ItensPedidoDTO dto) {
