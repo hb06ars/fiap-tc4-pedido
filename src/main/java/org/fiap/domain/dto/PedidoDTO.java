@@ -28,8 +28,8 @@ public class PedidoDTO {
     private List<ItensPedidoDTO> itensPedidoList;
     private BigDecimal totalCompra;
     private LocalDateTime dtPedido;
-    private LocalDateTime dtProcessamento;
-    private LocalDateTime dtAtualizacao;
+    private LocalDateTime dtProcessamento = LocalDateTime.now();
+    private LocalDateTime dtAtualizacao = LocalDateTime.now();
 
 
     public PedidoDTO(PedidoEntity entity) {

@@ -22,6 +22,6 @@ public class ItensPedidoDTO {
     private String skuProduto;
     private Long produtoId;
     private Integer quantidade;
-    private LocalDateTime dtAtualizacao;
+    private LocalDateTime dtAtualizacao = LocalDateTime.now();
 
 }
