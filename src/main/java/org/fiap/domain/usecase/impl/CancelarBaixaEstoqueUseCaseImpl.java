@@ -13,6 +13,6 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
 
     @Override
     public void execute(PagamentoDTO pagamentoDTO) {
-        log.info("Efetuando rollback do Estoque");
+        log.error("Efetuando rollback do Estoque");
     }
 }
