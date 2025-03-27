@@ -46,9 +46,10 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
         BigDecimal totalCompra = calcularTotalPedidoUseCase.execute(pedidoDTO, produtos);
         pedidoDTO.setTotalCompra(totalCompra);
-        pedidoMapper.preenchendoProdutoId(produtos, pedidoDTO);
+        PedidoDTO baixaEstoque = new PedidoDTO(pedidoDTO);
+        pedidoMapper.preenchendoProdutoId(produtos, baixaEstoque);
 
-        if (baixaEstoqueEfetuada(pedidoDTO)) {
+        if (baixaEstoqueEfetuada(baixaEstoque)) {
             log.info("Salvando o pedido na base de dados.");
             PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
             log.info("Efetuando pagamento.");
@@ -56,8 +57,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
     }
 
-    private boolean baixaEstoqueEfetuada(PedidoDTO pedidoDTO) {
-        PedidoDTO baixaEstoque = new PedidoDTO(pedidoDTO);
+    private boolean baixaEstoqueEfetuada(PedidoDTO baixaEstoque) {
         if (validarEstoqueUseCase.execute(baixaEstoque)) {
             efetuarBaixaEstoqueUseCase.execute(baixaEstoque);
             return true;
