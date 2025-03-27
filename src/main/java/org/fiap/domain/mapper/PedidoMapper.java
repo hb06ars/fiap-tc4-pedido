@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
-import org.fiap.domain.entity.ItensPedidoEntity;
 import org.fiap.domain.entity.PedidoEntity;
 import org.springframework.stereotype.Component;
 
