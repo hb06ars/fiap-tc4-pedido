@@ -51,7 +51,8 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
         });
         var pedido = pedidoService.findById(pagamentoDTO.getPedidoId());
         if (Objects.nonNull(pedido)) {
-            pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API);
+            if(pagamentoDTO.getStatusPagamento() == null)
+                pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API);
             pedidoService.save(new PedidoEntity(pedido));
         }
         log.error("Efetuando rollback do Estoque");
