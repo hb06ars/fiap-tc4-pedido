@@ -6,9 +6,11 @@ import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.usecase.EfetuarBaixaEstoqueUseCase;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
+@Transactional
 public class EfetuarBaixaEstoqueUseCaseImpl implements EfetuarBaixaEstoqueUseCase {
 
     private final EstoqueGatewayService estoqueGatewayService;
