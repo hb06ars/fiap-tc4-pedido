@@ -11,7 +11,6 @@ import org.fiap.domain.dto.PagamentoDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.entity.PedidoEntity;
-import org.fiap.domain.enums.StatusPagamentoEnum;
 import org.fiap.domain.mapper.PedidoMapper;
 import org.fiap.domain.usecase.CalcularTotalPedidoUseCase;
 import org.fiap.domain.usecase.CancelarBaixaEstoqueUseCase;
@@ -78,8 +77,8 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                             .build();
 
                     try {
-                        pagamentoGatewayService.save(pagamento);
-                        pedidoDTO.setStatus(StatusPagamentoEnum.FECHADO_COM_SUCESSO);
+                        var resultadoPagamento = pagamentoGatewayService.save(pagamento);
+                        pedidoDTO.setStatus(resultadoPagamento.getStatusPagamento());
                         log.info("Processamento do pedido finalizada.");
                     } catch (Exception e) {
                         log.error(API_PAGAMENTO_INDISPONIVEL);
