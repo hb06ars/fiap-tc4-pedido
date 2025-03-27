@@ -1,4 +1,4 @@
-package org.fiap.domain.dto.enums;
+package org.fiap.domain.enums;
 
 import lombok.Getter;
 
@@ -13,7 +13,7 @@ public enum StatusPagamentoEnum {
     private final Integer codigo;
     private final String descricao;
 
-    private StatusPagamentoEnum(Integer codigo, String descricao) {
+    StatusPagamentoEnum(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

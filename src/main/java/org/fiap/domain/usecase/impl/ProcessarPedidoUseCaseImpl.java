@@ -11,6 +11,7 @@ import org.fiap.domain.mapper.PedidoMapper;
 import org.fiap.domain.usecase.CalcularTotalPedidoUseCase;
 import org.fiap.domain.usecase.EfetuarBaixaEstoqueUseCase;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
+import org.fiap.domain.usecase.SalvarPedidoUseCase;
 import org.fiap.domain.usecase.ValidarEstoqueUseCase;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +27,16 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     private final ValidarEstoqueUseCase validarEstoqueUseCase;
     private final EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase;
     private final CalcularTotalPedidoUseCase calcularTotalPedidoUseCase;
+    private final SalvarPedidoUseCase salvarPedidoUseCase;
     private final PedidoMapper pedidoMapper;
 
-    public ProcessarPedidoUseCaseImpl(ClienteGatewayService clienteGatewayService, ProdutoGatewayService produtoGatewayService, EstoqueGatewayService estoqueGatewayService, ValidarEstoqueUseCase validarEstoqueUseCase, EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase, CalcularTotalPedidoUseCase calcularTotalPedidoUseCase, PedidoMapper pedidoMapper) {
+    public ProcessarPedidoUseCaseImpl(ClienteGatewayService clienteGatewayService, ProdutoGatewayService produtoGatewayService, EstoqueGatewayService estoqueGatewayService, ValidarEstoqueUseCase validarEstoqueUseCase, EfetuarBaixaEstoqueUseCase efetuarBaixaEstoqueUseCase, CalcularTotalPedidoUseCase calcularTotalPedidoUseCase, SalvarPedidoUseCase salvarPedidoUseCase, PedidoMapper pedidoMapper) {
         this.clienteGatewayService = clienteGatewayService;
         this.produtoGatewayService = produtoGatewayService;
         this.validarEstoqueUseCase = validarEstoqueUseCase;
         this.efetuarBaixaEstoqueUseCase = efetuarBaixaEstoqueUseCase;
         this.calcularTotalPedidoUseCase = calcularTotalPedidoUseCase;
+        this.salvarPedidoUseCase = salvarPedidoUseCase;
         this.pedidoMapper = pedidoMapper;
     }
 
@@ -46,7 +49,9 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
         pedidoMapper.preenchendoProdutoId(produtos, pedidoDTO);
 
         if (baixaEstoqueEfetuada(pedidoDTO)) {
-            log.info("SALVAR PEDIDO E ITENS DO PEDIDO.");
+            log.info("Salvando o pedido na base de dados.");
+            PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
+            log.info("Efetuando pagamento.");
         }
 
     }

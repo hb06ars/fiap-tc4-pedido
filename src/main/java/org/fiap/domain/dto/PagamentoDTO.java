@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.fiap.domain.dto.enums.StatusPagamentoEnum;
+import org.fiap.domain.enums.StatusPagamentoEnum;
 
 import java.time.LocalDateTime;
 
