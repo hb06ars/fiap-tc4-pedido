@@ -21,7 +21,7 @@ public class PagamentoDTO {
 
     private Long id;
     private Long pedidoId;
-    private Long idPagamento;
+    private String idPagamento;
     private LocalDateTime dtPagamento;
     private StatusPagamentoEnum statusPagamento;
     private LocalDateTime dtAtualizacao;
