@@ -11,6 +11,7 @@ import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
 import static org.fiap.domain.util.UrlConstants.ESTOQUE_BASE_URL;
+import static org.fiap.domain.util.UrlConstants.PAGAMENTO_BASE_URL;
 
 @Configuration
 public class PagamentoConfiguration {
@@ -25,7 +26,7 @@ public class PagamentoConfiguration {
     @Bean
     public IntegrationFlow salvandoPagamento() {
         return IntegrationFlow.from("pagamentoSave")
-                .handle(Http.outboundGateway(ESTOQUE_BASE_URL)
+                .handle(Http.outboundGateway(PAGAMENTO_BASE_URL)
                         .httpMethod(HttpMethod.POST)
                         .expectedResponseType(PagamentoDTO.class)
                         .extractPayload(true)
