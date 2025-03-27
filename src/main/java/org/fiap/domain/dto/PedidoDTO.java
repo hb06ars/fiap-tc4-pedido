@@ -65,6 +65,7 @@ public class PedidoDTO {
                 .map(item -> ItensPedidoDTO.builder()
                         .id(item.getId())
                         .pedidoId(item.getPedidoId())
+                        .produtoId(item.getProdutoId())
                         .dtAtualizacao(item.getDtAtualizacao())
                         .quantidade(item.getQuantidade())
                         .skuProduto(item.getSkuProduto())

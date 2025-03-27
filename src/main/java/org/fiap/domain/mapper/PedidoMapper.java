@@ -1,5 +1,6 @@
 package org.fiap.domain.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.service.EstoqueGatewayService;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
+@Slf4j
 public class PedidoMapper {
 
     private final EstoqueGatewayService estoqueGatewayService;
@@ -30,6 +32,7 @@ public class PedidoMapper {
                     );
                     pedidoDTO.setTotalCompra(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
                 }));
+        log.info(pedidoDTO.toString());
     }
 
     public PedidoEntity convertEntity(PedidoDTO pedidoDTO) {
