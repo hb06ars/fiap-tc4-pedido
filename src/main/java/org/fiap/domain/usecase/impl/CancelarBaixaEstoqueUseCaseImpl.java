@@ -46,7 +46,7 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
             estoqueGatewayService.updateByIdProduto(
                     EstoqueRequest.builder()
                             .id(idProduto)
-                            .quantidade(estoqueAtual - item.getQuantidade())
+                            .quantidade(estoqueAtual + item.getQuantidade())
                             .build());
         });
         var pedido = pedidoService.findById(pagamentoDTO.getPedidoId());
