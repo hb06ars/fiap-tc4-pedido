@@ -21,7 +21,7 @@ public class PedidoMapper {
         this.estoqueGatewayService = estoqueGatewayService;
     }
 
-    public void preenchendoProdutoId(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
+    public void preenchendoProdutoComBaixaNoEstoque(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
         pedidoDTO.getItensPedidoList().forEach(item -> produtos.stream()
                 .filter(produto -> produto.getSku().equalsIgnoreCase(item.getSkuProduto()))
                 .findFirst()

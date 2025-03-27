@@ -46,8 +46,9 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
         List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
         BigDecimal totalCompra = calcularTotalPedidoUseCase.execute(pedidoDTO, produtos);
         pedidoDTO.setTotalCompra(totalCompra);
+
         PedidoDTO baixaEstoque = new PedidoDTO(pedidoDTO);
-        pedidoMapper.preenchendoProdutoId(produtos, baixaEstoque);
+        pedidoMapper.preenchendoProdutoComBaixaNoEstoque(produtos, baixaEstoque);
 
         if (baixaEstoqueEfetuada(baixaEstoque)) {
             log.info("Salvando o pedido na base de dados.");
