@@ -34,7 +34,7 @@ public class SalvarPedidoUseCaseImpl implements SalvarPedidoUseCase {
             pedidoDTO.setId(result.getId());
             pedidoDTO.getItensPedidoList().forEach(item -> {
                 var itemEntity = itensPedidoRepository.save(ItensPedidoEntity.builder()
-                        .pedidoId(item.getPedidoId())
+                        .pedidoId(result.getId())
                         .skuProduto(item.getSkuProduto())
                         .quantidade(item.getQuantidade())
                         .dtAtualizacao(item.getDtAtualizacao())
