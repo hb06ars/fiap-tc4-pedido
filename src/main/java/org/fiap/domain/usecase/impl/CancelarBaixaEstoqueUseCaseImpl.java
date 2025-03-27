@@ -34,7 +34,7 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
     @Override
     public void execute(PagamentoDTO pagamentoDTO) {
         List<ItensPedidoEntity> itensPedido = itensPedidoRepository.findByPedidoId(pagamentoDTO.getPedidoId());
-        itensPedido.stream().forEach(item -> {
+        itensPedido.forEach(item -> {
             var idProduto = produtoGatewayService.findBySku(item.getSkuProduto()).getId();
             var estoqueAtual = estoqueGatewayService.findByIdProduto(idProduto).getQuantidade();
             estoqueGatewayService.updateByIdProduto(
