@@ -29,7 +29,6 @@ public class PedidoMapper {
                     item.setQuantidade(estoqueGatewayService
                             .findByIdProduto(produto.getId()).getQuantidade() - item.getQuantidade()
                     );
-                    pedidoDTO.setTotalCompra(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
                 }));
         return pedidoDTO;
     }
@@ -43,6 +42,7 @@ public class PedidoMapper {
                 .dtPedido(pedidoDTO.getDtPedido())
                 .dtProcessamento(pedidoDTO.getDtProcessamento())
                 .dtAtualizacao(pedidoDTO.getDtProcessamento())
+                .valorTotal(pedidoDTO.getValorTotal())
                 .build();
     }
 }

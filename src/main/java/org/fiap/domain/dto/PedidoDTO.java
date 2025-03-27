@@ -26,7 +26,6 @@ public class PedidoDTO {
     private String numeroCartaoCredito;
     private StatusPagamentoEnum status = StatusPagamentoEnum.ABERTO;
     private List<ItensPedidoDTO> itensPedidoList;
-    private BigDecimal totalCompra;
     private LocalDateTime dtPedido;
     private LocalDateTime dtProcessamento = LocalDateTime.now();
     private LocalDateTime dtAtualizacao = LocalDateTime.now();
