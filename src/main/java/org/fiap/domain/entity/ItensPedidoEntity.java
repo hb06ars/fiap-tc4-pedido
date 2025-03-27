@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @AllArgsConstructor
-@Table(name = "pedido")
+@Table(name = "itens_pedido")
 public class ItensPedidoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
