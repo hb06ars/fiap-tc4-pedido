@@ -21,7 +21,7 @@ public class PedidoMapper {
         this.estoqueGatewayService = estoqueGatewayService;
     }
 
-    public void preenchendoProdutoComBaixaNoEstoque(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
+    public PedidoDTO estoqueBaixaDto(List<ProdutoDTO> produtos, PedidoDTO pedidoDTO) {
         pedidoDTO.getItensPedidoList().forEach(item -> produtos.stream()
                 .filter(produto -> produto.getSku().equalsIgnoreCase(item.getSkuProduto()))
                 .findFirst()
@@ -32,7 +32,7 @@ public class PedidoMapper {
                     );
                     pedidoDTO.setTotalCompra(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
                 }));
-        log.info(pedidoDTO.toString());
+        return pedidoDTO;
     }
 
     public PedidoEntity convertEntity(PedidoDTO pedidoDTO) {
