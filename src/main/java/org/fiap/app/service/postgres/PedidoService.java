@@ -6,7 +6,6 @@ import org.fiap.infra.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class PedidoService {
