@@ -28,6 +28,7 @@ public class SalvarPedidoUseCaseImpl implements SalvarPedidoUseCase {
     @Override
     public PedidoDTO execute(PedidoDTO pedidoDTO) {
         PedidoEntity pedidoEntity = pedidoMapper.convertEntity(pedidoDTO);
+        pedidoEntity.setValorTotal(pedidoDTO.getValorTotal());
         var result = pedidoService.save(pedidoEntity);
         if (result.getId() != null) {
             pedidoDTO.setId(result.getId());
