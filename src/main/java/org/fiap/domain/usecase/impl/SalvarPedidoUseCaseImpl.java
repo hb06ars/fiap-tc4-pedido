@@ -31,6 +31,7 @@ public class SalvarPedidoUseCaseImpl implements SalvarPedidoUseCase {
         var result = pedidoService.save(pedidoEntity);
         if (result.getId() != null) {
             pedidoDTO.setId(result.getId());
+            pedidoDTO.setValorTotal(result.getValorTotal());
             pedidoDTO.getItensPedidoList().forEach(item -> {
                 var itemEntity = itensPedidoService.save(ItensPedidoEntity.builder()
                         .pedidoId(result.getId())
