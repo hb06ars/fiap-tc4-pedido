@@ -57,8 +57,9 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     }
 
     private boolean baixaEstoqueEfetuada(PedidoDTO pedidoDTO) {
-        if (validarEstoqueUseCase.execute(pedidoDTO)) {
-            efetuarBaixaEstoqueUseCase.execute(pedidoDTO);
+        PedidoDTO baixaEstoque = new PedidoDTO(pedidoDTO);
+        if (validarEstoqueUseCase.execute(baixaEstoque)) {
+            efetuarBaixaEstoqueUseCase.execute(baixaEstoque);
             return true;
         }
         return false;

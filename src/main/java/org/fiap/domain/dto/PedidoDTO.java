@@ -51,4 +51,24 @@ public class PedidoDTO {
                         .build())
                 .toList();
     }
+
+    public PedidoDTO(PedidoDTO pedidoDTO) {
+        this.id = pedidoDTO.getId();
+        this.clienteId = pedidoDTO.getClienteId();
+        this.numeroCartaoCredito = pedidoDTO.getNumeroCartaoCredito();
+        this.status = pedidoDTO.getStatus();
+        this.dtPedido = pedidoDTO.getDtPedido();
+        this.dtProcessamento = pedidoDTO.getDtProcessamento();
+        this.dtAtualizacao = pedidoDTO.getDtAtualizacao();
+        this.itensPedidoList = pedidoDTO.getItensPedidoList()
+                .stream()
+                .map(item -> ItensPedidoDTO.builder()
+                        .id(item.getId())
+                        .pedidoId(item.getPedidoId())
+                        .dtAtualizacao(item.getDtAtualizacao())
+                        .quantidade(item.getQuantidade())
+                        .skuProduto(item.getSkuProduto())
+                        .build())
+                .toList();
+    }
 }
