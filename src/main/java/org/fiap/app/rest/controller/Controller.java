@@ -2,6 +2,7 @@ package org.fiap.app.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.service.postgres.PedidoService;
 import org.fiap.domain.dto.PagamentoDTO;
@@ -43,7 +44,7 @@ public class Controller {
             description = "RollBack do Estoque")
     @ApiResponse(responseCode = HttpStatusCodes.OK, description = "Buscar Pedido.")
     @PostMapping("/rollback")
-    public PagamentoDTO rollBackEstoque(@RequestBody PagamentoDTO pagamentoDTO) {
+    public PagamentoDTO rollBackEstoque(@Valid @RequestBody PagamentoDTO pagamentoDTO) {
         log.info("requisição para efetuar rollback do estoque.");
         return cancelarBaixaEstoqueUseCase.execute(pagamentoDTO);
     }
