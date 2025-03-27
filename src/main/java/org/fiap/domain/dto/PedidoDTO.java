@@ -30,6 +30,7 @@ public class PedidoDTO {
     private LocalDateTime dtPedido;
     private LocalDateTime dtProcessamento = LocalDateTime.now();
     private LocalDateTime dtAtualizacao = LocalDateTime.now();
+    private BigDecimal valorTotal;
 
 
     public PedidoDTO(PedidoEntity entity) {
@@ -40,6 +41,7 @@ public class PedidoDTO {
         this.dtPedido = entity.getDtPedido();
         this.dtProcessamento = entity.getDtProcessamento();
         this.dtAtualizacao = entity.getDtAtualizacao();
+        this.valorTotal = entity.getValorTotal();
     }
 
     public PedidoDTO(PedidoDTO pedidoDTO) {
@@ -50,6 +52,7 @@ public class PedidoDTO {
         this.dtPedido = pedidoDTO.getDtPedido();
         this.dtProcessamento = pedidoDTO.getDtProcessamento();
         this.dtAtualizacao = pedidoDTO.getDtAtualizacao();
+        this.valorTotal = pedidoDTO.getValorTotal();
         this.itensPedidoList = pedidoDTO.getItensPedidoList()
                 .stream()
                 .map(item -> ItensPedidoDTO.builder()

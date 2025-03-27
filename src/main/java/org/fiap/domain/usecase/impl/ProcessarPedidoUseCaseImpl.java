@@ -67,6 +67,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
                     PagamentoDTO pagamento = PagamentoDTO.builder()
                             .pedidoId(pedidoSalvo.getId())
+                            .valorTotal(pedidoSalvo.getValorTotal())
                             .dtPagamento(LocalDateTime.now())
                             .dtAtualizacao(LocalDateTime.now())
                             .build();

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fiap.domain.enums.StatusPagamentoEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,5 +25,6 @@ public class PagamentoDTO {
     private LocalDateTime dtPagamento;
     private StatusPagamentoEnum statusPagamento;
     private LocalDateTime dtAtualizacao;
+    private BigDecimal valorTotal;
 
 }
