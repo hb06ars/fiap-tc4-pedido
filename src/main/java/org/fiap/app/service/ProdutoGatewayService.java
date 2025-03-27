@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
+import static org.fiap.domain.util.StringConstants.API_PRODUTO_INDISPONIVEL;
 
 @Service
 @Slf4j
@@ -25,7 +26,7 @@ public class ProdutoGatewayService {
         try {
             return gateway.produtoFindBySku(new GenericMessage<>(sku.trim()));
         } catch (ResourceAccessException ex) {
-            log.error(API_INDISPONIVEL);
+            log.error(API_PRODUTO_INDISPONIVEL);
             return null;
         }
     }

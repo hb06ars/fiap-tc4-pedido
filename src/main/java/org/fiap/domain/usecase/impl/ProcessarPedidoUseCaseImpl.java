@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
+import static org.fiap.domain.util.StringConstants.API_PAGAMENTO_INDISPONIVEL;
 
 @Component
 @Slf4j
@@ -76,7 +77,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                         pagamentoGatewayService.save(pagamento);
                     } catch (Exception e) {
                         cancelarBaixaEstoqueUseCase.execute(pagamento);
-                        log.error(API_INDISPONIVEL);
+                        log.error(API_PAGAMENTO_INDISPONIVEL);
                     }
                 }
             }

@@ -7,6 +7,7 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import static org.fiap.domain.util.StringConstants.API_CLIENTES_INDISPONIVEL;
 import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
 
 @Service
@@ -23,7 +24,7 @@ public class ClienteGatewayService {
         try {
             return gateway.clienteFindById(new GenericMessage<>(id));
         } catch (ResourceAccessException ex) {
-            log.error(API_INDISPONIVEL);
+            log.error(API_CLIENTES_INDISPONIVEL);
             return null;
         }
     }

@@ -8,6 +8,7 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import static org.fiap.domain.util.StringConstants.API_ESTOQUE_INDISPONIVEL;
 import static org.fiap.domain.util.StringConstants.API_INDISPONIVEL;
 
 @Service
@@ -33,7 +34,7 @@ public class EstoqueGatewayService {
         try {
             return gateway.estoqueUpdateByIdProduto(new GenericMessage<>(request));
         } catch (ResourceAccessException ex) {
-            log.error(API_INDISPONIVEL);
+            log.error(API_ESTOQUE_INDISPONIVEL);
             return null;
         }
     }
