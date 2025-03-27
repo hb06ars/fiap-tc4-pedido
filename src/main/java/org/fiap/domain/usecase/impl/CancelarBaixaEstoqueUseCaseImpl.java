@@ -34,7 +34,7 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
 
 
     @Override
-    public void execute(PagamentoDTO pagamentoDTO) {
+    public PagamentoDTO execute(PagamentoDTO pagamentoDTO) {
         List<ItensPedidoDTO> itensPedido = itensPedidoService
                 .findByPedidoId(pagamentoDTO.getPedidoId())
                 .stream().map(ItensPedidoDTO::new)
@@ -53,8 +53,11 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
         if (Objects.nonNull(pedido)) {
             if(pagamentoDTO.getStatusPagamento() == null)
                 pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API);
+            else
+                pedido.setStatus(pagamentoDTO.getStatusPagamento());
             pedidoService.save(new PedidoEntity(pedido));
         }
-        log.error("Efetuando rollback do Estoque");
+        log.error("Rollback do Estoque efetuado");
+        return pagamentoDTO;
     }
 }

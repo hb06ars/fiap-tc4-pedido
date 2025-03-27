@@ -43,9 +43,9 @@ public class Controller {
             description = "RollBack do Estoque")
     @ApiResponse(responseCode = HttpStatusCodes.OK, description = "Buscar Pedido.")
     @PostMapping("/rollback")
-    public void rollBackEstoque(@RequestBody PagamentoDTO pagamentoDTO) {
+    public PagamentoDTO rollBackEstoque(@RequestBody PagamentoDTO pagamentoDTO) {
         log.info("requisição para efetuar rollback do estoque.");
-        cancelarBaixaEstoqueUseCase.execute(pagamentoDTO);
+        return cancelarBaixaEstoqueUseCase.execute(pagamentoDTO);
     }
 
 }

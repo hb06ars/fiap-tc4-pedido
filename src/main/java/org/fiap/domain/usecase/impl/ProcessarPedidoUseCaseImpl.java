@@ -11,6 +11,7 @@ import org.fiap.domain.dto.PagamentoDTO;
 import org.fiap.domain.dto.PedidoDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.entity.PedidoEntity;
+import org.fiap.domain.enums.StatusPagamentoEnum;
 import org.fiap.domain.mapper.PedidoMapper;
 import org.fiap.domain.usecase.CalcularTotalPedidoUseCase;
 import org.fiap.domain.usecase.CancelarBaixaEstoqueUseCase;
@@ -78,18 +79,20 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
                     try {
                         var resultadoPagamento = pagamentoGatewayService.save(pagamento);
-                        pedidoDTO.setStatus(resultadoPagamento.getStatusPagamento());
+                        if (resultadoPagamento != null)
+                            pedidoDTO.setStatus(resultadoPagamento.getStatusPagamento());
+                        else
+                            pedidoDTO.setStatus(StatusPagamentoEnum.FECHADO_SEM_CREDITO);
                         log.info("Processamento do pedido finalizada.");
                     } catch (Exception e) {
                         log.error(API_PAGAMENTO_INDISPONIVEL);
+                        pedidoDTO.setStatus(StatusPagamentoEnum.ERRO_NA_API);
                         cancelarBaixaEstoqueUseCase.execute(pagamento);
                     } finally {
                         pedidoService.save(new PedidoEntity(pedidoDTO));
                     }
                 }
             }
-        } else {
-            log.error("Cliente inexistente.");
         }
     }
 
