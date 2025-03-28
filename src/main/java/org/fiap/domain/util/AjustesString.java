@@ -1,17 +1,11 @@
 package org.fiap.domain.util;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class AjustesString {
-
-    private AjustesString() {
-        throw new UnsupportedOperationException("Construtor AjustesString() não deve ser chamado.");
-    }
 
     public static String removerTracosCpf(String cpf) {
         if (cpf != null)
