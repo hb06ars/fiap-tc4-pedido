@@ -7,7 +7,6 @@ import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.domain.entity.PedidoEntity;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component

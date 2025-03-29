@@ -1,6 +1,8 @@
 package org.fiap.domain.util;
 
+import lombok.Generated;
 
+@Generated
 public class StringConstants {
 
     public static final String API_INDISPONIVEL = "A API de clientes está indisponível";
