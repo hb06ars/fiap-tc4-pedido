@@ -56,7 +56,6 @@ class SalvarPedidoUseCaseImplTest {
 
     @Test
     void testSalvarPedido_Success() {
-        // Configurando mocks
         PedidoEntity pedidoEntity = new PedidoEntity();
         pedidoEntity.setId(1L);
         pedidoEntity.setValorTotal(BigDecimal.valueOf(150));

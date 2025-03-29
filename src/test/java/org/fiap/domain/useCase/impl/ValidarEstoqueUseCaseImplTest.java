@@ -29,32 +29,26 @@ class ValidarEstoqueUseCaseImplTest {
 
     @Test
     void testEstoqueValido() {
-        // Preparando os itens do pedido com quantidades válidas
         ItensPedidoDTO item1 = ItensPedidoDTO.builder().skuProduto("sku1").quantidade(5).build();
         ItensPedidoDTO item2 = ItensPedidoDTO.builder().skuProduto("sku2").quantidade(3).build();
 
         when(pedidoDTO.getItensPedidoList()).thenReturn(java.util.List.of(item1, item2));
 
-        // Chamando o método a ser testado
         boolean result = validarEstoqueUseCase.execute(pedidoDTO);
 
-        // Verificando se o estoque é considerado válido
         assertTrue(result);
         verify(pedidoDTO).getItensPedidoList();
     }
 
     @Test
     void testEstoqueInvalido() {
-        // Preparando os itens do pedido com uma quantidade inválida (menor que 0)
         ItensPedidoDTO item1 = ItensPedidoDTO.builder().skuProduto("sku1").quantidade(5).build();
         ItensPedidoDTO item2 = ItensPedidoDTO.builder().skuProduto("sku2").quantidade(-3).build();  // Quantidade negativa
 
         when(pedidoDTO.getItensPedidoList()).thenReturn(java.util.List.of(item1, item2));
 
-        // Chamando o método a ser testado
         boolean result = validarEstoqueUseCase.execute(pedidoDTO);
 
-        // Verificando se o estoque é considerado inválido
         assertFalse(result);
         verify(pedidoDTO).getItensPedidoList();
     }

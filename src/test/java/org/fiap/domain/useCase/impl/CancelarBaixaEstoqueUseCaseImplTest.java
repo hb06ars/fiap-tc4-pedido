@@ -32,15 +32,15 @@ import static org.mockito.Mockito.when;
 
 class CancelarBaixaEstoqueUseCaseImplTest {
     @Mock
-    ItensPedidoService itensPedidoService;
+    private ItensPedidoService itensPedidoService;
     @Mock
-    PedidoService pedidoService;
+    private PedidoService pedidoService;
     @Mock
-    EstoqueGatewayService estoqueGatewayService;
+    private EstoqueGatewayService estoqueGatewayService;
     @Mock
-    ProdutoGatewayService produtoGatewayService;
+    private ProdutoGatewayService produtoGatewayService;
     @InjectMocks
-    CancelarBaixaEstoqueUseCaseImpl cancelarBaixaEstoqueUseCaseImpl;
+    private CancelarBaixaEstoqueUseCaseImpl cancelarBaixaEstoqueUseCaseImpl;
 
     @BeforeEach
     void setUp() {
