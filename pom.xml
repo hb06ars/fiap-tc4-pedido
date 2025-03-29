@@ -9,11 +9,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.fiap.fiap-tc4-cliente</groupId>
-    <artifactId>fiap-tc4-cliente</artifactId>
+    <groupId>org.fiap.fiap-tc4-pedido</groupId>
+    <artifactId>fiap-tc4-pedido</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cliente</name>
-    <description>Micro-serviço de Cliente</description>
+    <name>pedido</name>
+    <description>Micro-serviço de Pedido</description>
 
     <properties>
         <java.version>17</java.version>
