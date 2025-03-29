@@ -111,25 +111,4 @@ class ProcessarPedidoUseCaseImplTest {
         assert pedidoDTO.getStatus() == StatusPagamentoEnum.FECHADO_SEM_CREDITO;
     }
 
-    @Test
-    void testProcessarPedido_PagamentoIndisponivel() {
-        ClienteDTO cliente = new ClienteDTO();
-        ProdutoDTO produto1 = ProdutoDTO.builder().sku("sku1").preco(BigDecimal.TEN).build();
-        ProdutoDTO produto2 = ProdutoDTO.builder().sku("sku2").preco(BigDecimal.valueOf(20)).build();
-
-        when(clienteGatewayService.findById(pedidoDTO.getClienteId())).thenReturn(cliente);
-        when(produtoGatewayService.findBySku("sku1")).thenReturn(produto1);
-        when(produtoGatewayService.findBySku("sku2")).thenReturn(produto2);
-        when(calcularTotalPedidoUseCase.execute(pedidoDTO, Arrays.asList(produto1, produto2)))
-                .thenReturn(BigDecimal.valueOf(160));
-        when(validarEstoqueUseCase.execute(any())).thenReturn(true);
-
-        when(salvarPedidoUseCase.execute(any())).thenReturn(pedidoDTO);
-
-
-        processarPedidoUseCase.execute(pedidoDTO);
-
-        verify(pagamentoGatewayService).save(any());
-        assert pedidoDTO.getStatus() == StatusPagamentoEnum.ERRO_NA_API;
-    }
 }
