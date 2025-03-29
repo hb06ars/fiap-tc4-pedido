@@ -100,6 +100,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 log.error("Não há estoque disponível para o pedido.");
                 log.error("Cancelando o pedido.");
                 pedidoDTO.setStatus(StatusPagamentoEnum.FECHADO_SEM_ESTOQUE);
+                pedidoDTO.setValorTotal(totalCompra);
                 var pedidoCancelado = pedidoService.save(new PedidoEntity(pedidoDTO));
 
                 pedidoDTO.getItensPedidoList()
