@@ -12,3 +12,7 @@
 ### ARQUITETURA
 > - Linguagem: **Java 17**
 > - Framework: **Spring Boot**
+
+### KAFKA
+> - Link url KafkaDrop: **http://localhost:9000/**
+> - Tópico criado automaticamente: **pedidotopic**
