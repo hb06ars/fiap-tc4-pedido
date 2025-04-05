@@ -8,13 +8,10 @@ import org.fiap.app.service.postgres.ItensPedidoService;
 import org.fiap.app.service.postgres.PedidoService;
 import org.fiap.domain.dto.ItensPedidoDTO;
 import org.fiap.domain.dto.PagamentoDTO;
-import org.fiap.domain.entity.PedidoEntity;
-import org.fiap.domain.enums.StatusPagamentoEnum;
 import org.fiap.domain.usecase.CancelarBaixaEstoqueUseCase;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
 @Component
 @Slf4j
@@ -49,14 +46,6 @@ public class CancelarBaixaEstoqueUseCaseImpl implements CancelarBaixaEstoqueUseC
                             .quantidade(estoqueAtual + item.getQuantidade())
                             .build());
         });
-        var pedido = pedidoService.findById(pagamentoDTO.getPedidoId());
-        if (Objects.nonNull(pedido)) {
-            if(pagamentoDTO.getStatusPagamento() == null)
-                pedido.setStatus(StatusPagamentoEnum.ERRO_NA_API);
-            else
-                pedido.setStatus(pagamentoDTO.getStatusPagamento());
-            pedidoService.save(new PedidoEntity(pedido));
-        }
         log.error("Rollback do Estoque efetuado");
         return pagamentoDTO;
     }

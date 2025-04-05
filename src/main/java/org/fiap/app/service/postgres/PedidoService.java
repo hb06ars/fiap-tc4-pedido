@@ -23,4 +23,8 @@ public class PedidoService {
     public PedidoDTO save(PedidoEntity pedido) {
         return new PedidoDTO(pedidoRepository.save(pedido));
     }
+
+    public void delete(PedidoEntity pedidoEntity) {
+        pedidoRepository.delete(pedidoEntity);
+    }
 }

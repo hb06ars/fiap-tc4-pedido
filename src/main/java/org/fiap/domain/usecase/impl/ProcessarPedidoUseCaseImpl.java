@@ -62,6 +62,8 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
     @Override
     public void execute(PedidoDTO pedidoDTO) {
         ClienteDTO cliente = clienteGatewayService.findById(pedidoDTO.getClienteId());
+        PedidoDTO pedidoSalvo = PedidoDTO.builder().build();
+
         if (cliente != null) {
             List<ProdutoDTO> produtos = buscarProdutos(pedidoDTO);
             BigDecimal totalCompra = calcularTotalPedidoUseCase.execute(pedidoDTO, produtos);
@@ -76,7 +78,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                 try {
                     log.info("Salvando o pedido na base de dados.");
                     pedidoDTO.setValorTotal(totalCompra);
-                    PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
+                    pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
 
                     if (pedidoSalvo.getId() != null) {
                         log.info("Efetuando pagamento.");
@@ -88,7 +90,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                             pedidoDTO.setStatus(resultadoPagamento.getStatusPagamento());
                         else
                             pedidoDTO.setStatus(StatusPagamentoEnum.FECHADO_SEM_CREDITO);
-                        pedidoService.save(new PedidoEntity(pedidoDTO));
+                        pedidoSalvo = pedidoService.save(new PedidoEntity(pedidoDTO));
                         log.info("Processamento do pedido finalizada.");
                     }
                 } catch (Exception e) {
@@ -96,6 +98,7 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
                     if (Objects.nonNull(pagamento) && pagamento.getPedidoId() != null) {
                         log.error("Efetuando rollback de estoque.");
                         cancelarBaixaEstoqueUseCase.execute(pagamento);
+                        pedidoService.delete(new PedidoEntity(pedidoSalvo));
                         throw new ObjectNotFoundException("Erro ao efetuar o pagamento do pedido.");
                     }
                 }

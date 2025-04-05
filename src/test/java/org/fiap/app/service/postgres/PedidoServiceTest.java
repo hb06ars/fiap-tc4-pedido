@@ -77,4 +77,10 @@ class PedidoServiceTest {
         assertEquals(BigDecimal.valueOf(250), result.getValorTotal());
         verify(pedidoRepository, times(1)).save(mockEntity);
     }
+
+    @Test
+    void testDelete_Success() {
+        pedidoService.delete(mockEntity);
+        verify(pedidoRepository, times(1)).delete(mockEntity);
+    }
 }
