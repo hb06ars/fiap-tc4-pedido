@@ -1,6 +1,5 @@
 package org.fiap.infra.config.integration;
 
-import org.fiap.domain.dto.ClienteDTO;
 import org.fiap.domain.dto.ProdutoDTO;
 import org.fiap.infra.exceptions.GatewayResponseErrorHandler;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
-import static org.fiap.domain.util.UrlConstants.CLIENTE_BASE_URL;
 import static org.fiap.domain.util.UrlConstants.PRODUTO_BASE_URL;
 
 @Configuration

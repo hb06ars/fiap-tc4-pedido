@@ -11,7 +11,6 @@ import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
 import static org.fiap.domain.util.UrlConstants.ESTOQUE_BASE_URL;
-import static org.fiap.domain.util.UrlConstants.PRODUTO_BASE_URL;
 
 @Configuration
 public class EstoqueConfiguration {

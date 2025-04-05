@@ -10,7 +10,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.messaging.MessageChannel;
 
-import static org.fiap.domain.util.UrlConstants.ESTOQUE_BASE_URL;
 import static org.fiap.domain.util.UrlConstants.PAGAMENTO_BASE_URL;
 
 @Configuration

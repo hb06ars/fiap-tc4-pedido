@@ -2,6 +2,8 @@ package org.fiap.app.service.gateway;
 
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.domain.dto.ClienteDTO;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.web.client.ResourceAccessException;
 
+import static org.fiap.domain.util.StringConstants.API_CLIENTES_INDISPONIVEL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,11 +55,12 @@ class ClienteGatewayServiceTest {
 
     @Test
     void testFindById_ApiIndisponivel() {
-        when(gatewayApi.clienteFindById(any(GenericMessage.class))).thenThrow(new ResourceAccessException("API Indisponível"));
+        when(gatewayApi.clienteFindById(any(GenericMessage.class))).thenThrow(new ResourceAccessException(API_CLIENTES_INDISPONIVEL));
 
-        ClienteDTO result = clienteGatewayService.findById(2L);
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> {
+            clienteGatewayService.findById(2L);
+        });
 
-        assertNull(result);
         verify(gatewayApi, times(1)).clienteFindById(any(GenericMessage.class));
     }
 }

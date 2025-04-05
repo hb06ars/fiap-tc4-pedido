@@ -3,6 +3,8 @@ package org.fiap.app.service.gateway;
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.app.rest.request.estoque.EstoqueRequest;
 import org.fiap.domain.dto.EstoqueDTO;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.web.client.ResourceAccessException;
 
+import static org.fiap.domain.util.StringConstants.API_ESTOQUE_INDISPONIVEL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,12 +55,13 @@ class EstoqueGatewayServiceTest {
     @Test
     void testFindByIdProduto_ApiIndisponivel() {
         when(gatewayApi.estoqueFindByIdProduto(any(GenericMessage.class)))
-                .thenThrow(new ResourceAccessException("API Indisponível"));
+                .thenThrow(new ResourceAccessException(API_ESTOQUE_INDISPONIVEL));
 
-        EstoqueDTO result = estoqueGatewayService.findByIdProduto(2L);
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> {
+            estoqueGatewayService.findByIdProduto(2L);
+        });
 
-        assertNull(result);
-        verify(gatewayApi, times(1)).estoqueFindByIdProduto(any(GenericMessage.class));
+        verify(gatewayApi, times(1)).estoqueFindByIdProduto(any());
     }
 
     @Test
@@ -75,12 +78,13 @@ class EstoqueGatewayServiceTest {
 
     @Test
     void testUpdateByIdProduto_ApiIndisponivel() {
-        when(gatewayApi.estoqueUpdateByIdProduto(any(GenericMessage.class)))
-                .thenThrow(new ResourceAccessException("API Estoque Indisponível"));
 
-        EstoqueDTO result = estoqueGatewayService.updateByIdProduto(mockRequest);
+        when(gatewayApi.estoqueUpdateByIdProduto(any(GenericMessage.class))).thenThrow(new ResourceAccessException(API_ESTOQUE_INDISPONIVEL));
 
-        assertNull(result);
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> {
+            estoqueGatewayService.updateByIdProduto(mockRequest);
+        });
+
         verify(gatewayApi, times(1)).estoqueUpdateByIdProduto(any(GenericMessage.class));
     }
 }

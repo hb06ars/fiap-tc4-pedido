@@ -2,6 +2,8 @@ package org.fiap.app.service.gateway;
 
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.domain.dto.ProdutoDTO;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.web.client.ResourceAccessException;
 
+import static org.fiap.domain.util.StringConstants.API_PRODUTO_INDISPONIVEL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,12 +52,12 @@ class ProdutoGatewayServiceTest {
 
     @Test
     void testFindBySku_ApiIndisponivel() {
-        when(gatewayApi.produtoFindBySku(any(GenericMessage.class)))
-                .thenThrow(new ResourceAccessException("API Produto Indisponível"));
+        when(gatewayApi.produtoFindBySku(any(GenericMessage.class))).thenThrow(new ResourceAccessException(API_PRODUTO_INDISPONIVEL));
 
-        ProdutoDTO result = produtoGatewayService.findBySku("ABC123");
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> {
+            produtoGatewayService.findBySku("ABC123");
+        });
 
-        assertNull(result);
         verify(gatewayApi, times(1)).produtoFindBySku(any(GenericMessage.class));
     }
 }
