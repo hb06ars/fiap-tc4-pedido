@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.app.rest.request.estoque.EstoqueRequest;
 import org.fiap.domain.dto.EstoqueDTO;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -26,7 +27,7 @@ public class EstoqueGatewayService {
             return gateway.estoqueFindByIdProduto(new GenericMessage<>(produtoId));
         } catch (ResourceAccessException ex) {
             log.error(API_INDISPONIVEL);
-            return null;
+            throw new ObjectNotFoundException(API_ESTOQUE_INDISPONIVEL);
         }
     }
 
@@ -35,7 +36,7 @@ public class EstoqueGatewayService {
             return gateway.estoqueUpdateByIdProduto(new GenericMessage<>(request));
         } catch (ResourceAccessException ex) {
             log.error(API_ESTOQUE_INDISPONIVEL);
-            return null;
+            throw new ObjectNotFoundException(API_ESTOQUE_INDISPONIVEL);
         }
     }
 }

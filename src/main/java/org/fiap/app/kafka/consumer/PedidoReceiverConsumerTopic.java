@@ -29,4 +29,9 @@ public class PedidoReceiverConsumerTopic {
         acknowledgment.acknowledge();
         log.info("Consumo Finalizado");
     }
+
+    @KafkaListener(topics = "${spring.kafka.topic-dlq}", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumirDlq(String mensagem) {
+        log.error("Mensagem na DLQ: {}", mensagem);
+    }
 }

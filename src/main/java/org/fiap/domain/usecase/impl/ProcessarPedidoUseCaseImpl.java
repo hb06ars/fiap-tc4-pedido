@@ -21,13 +21,13 @@ import org.fiap.domain.usecase.EfetuarBaixaEstoqueUseCase;
 import org.fiap.domain.usecase.ProcessarPedidoUseCase;
 import org.fiap.domain.usecase.SalvarPedidoUseCase;
 import org.fiap.domain.usecase.ValidarEstoqueUseCase;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.fiap.domain.util.StringConstants.API_PAGAMENTO_INDISPONIVEL;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -68,32 +68,35 @@ public class ProcessarPedidoUseCaseImpl implements ProcessarPedidoUseCase {
 
             PedidoDTO baixaEstoque = pedidoMapper.estoqueBaixaDto(produtos, new PedidoDTO(pedidoDTO));
             if (baixaEstoqueEfetuada(baixaEstoque)) {
-                log.info("Salvando o pedido na base de dados.");
-                pedidoDTO.setValorTotal(totalCompra);
-                PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
-                if (pedidoSalvo.getId() != null) {
-                    log.info("Efetuando pagamento.");
+                PagamentoDTO pagamento = PagamentoDTO.builder()
+                        .valorTotal(totalCompra)
+                        .dtPagamento(LocalDateTime.now())
+                        .dtAtualizacao(LocalDateTime.now())
+                        .build();
+                try {
+                    log.info("Salvando o pedido na base de dados.");
+                    pedidoDTO.setValorTotal(totalCompra);
+                    PedidoDTO pedidoSalvo = salvarPedidoUseCase.execute(pedidoDTO);
 
-                    PagamentoDTO pagamento = PagamentoDTO.builder()
-                            .pedidoId(pedidoSalvo.getId())
-                            .valorTotal(pedidoSalvo.getValorTotal())
-                            .dtPagamento(LocalDateTime.now())
-                            .dtAtualizacao(LocalDateTime.now())
-                            .build();
+                    if (pedidoSalvo.getId() != null) {
+                        log.info("Efetuando pagamento.");
 
-                    try {
+                        pagamento.setPedidoId(pedidoSalvo.getId());
+
                         var resultadoPagamento = pagamentoGatewayService.save(pagamento);
                         if (resultadoPagamento != null)
                             pedidoDTO.setStatus(resultadoPagamento.getStatusPagamento());
                         else
                             pedidoDTO.setStatus(StatusPagamentoEnum.FECHADO_SEM_CREDITO);
-                        log.info("Processamento do pedido finalizada.");
-                    } catch (Exception e) {
-                        log.error(API_PAGAMENTO_INDISPONIVEL);
-                        pedidoDTO.setStatus(StatusPagamentoEnum.ERRO_NA_API);
-                        cancelarBaixaEstoqueUseCase.execute(pagamento);
-                    } finally {
                         pedidoService.save(new PedidoEntity(pedidoDTO));
+                        log.info("Processamento do pedido finalizada.");
+                    }
+                } catch (Exception e) {
+                    log.error("Erro ao efetuar processamento do pedido: {}", e.getMessage());
+                    if (Objects.nonNull(pagamento) && pagamento.getPedidoId() != null) {
+                        log.error("Efetuando rollback de estoque.");
+                        cancelarBaixaEstoqueUseCase.execute(pagamento);
+                        throw new ObjectNotFoundException("Erro ao efetuar o pagamento do pedido.");
                     }
                 }
             } else {

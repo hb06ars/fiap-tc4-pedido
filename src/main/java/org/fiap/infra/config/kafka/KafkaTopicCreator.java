@@ -1,5 +1,6 @@
 package org.fiap.infra.config.kafka;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -18,15 +19,22 @@ public class KafkaTopicCreator {
 
     private final String BOOTSTRAP_SERVERS;
     private final String TOPIC;
+    private final String TOPIC_DLQ;
 
     public KafkaTopicCreator(
             @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers,
-            @Value("${spring.kafka.topic}") String topic
+            @Value("${spring.kafka.topic}") String topic,
+            @Value("${spring.kafka.topic-dlq}") String topicDlq
     ) {
         BOOTSTRAP_SERVERS = bootstrapServers;
         TOPIC = topic;
+        TOPIC_DLQ = topicDlq;
     }
 
+    @PostConstruct
+    public void init() {
+        creatorTopic();
+    }
 
     public void creatorTopic() {
 
@@ -34,15 +42,20 @@ public class KafkaTopicCreator {
         config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 
         try (AdminClient adminClient = AdminClient.create(config)) {
-            if (!topicExists(adminClient, TOPIC)) {
-                NewTopic newTopic = new NewTopic(TOPIC, 1, (short) 1);
-                adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
-                log.info("Tópico criado: " + TOPIC);
-            } else {
-                log.error("Tópico já existe: " + TOPIC);
-            }
+            criarTopico(adminClient, TOPIC);
+            criarTopico(adminClient, TOPIC_DLQ);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void criarTopico(AdminClient adminClient, String topico) throws ExecutionException, InterruptedException {
+        if (!topicExists(adminClient, topico)) {
+            NewTopic newTopic = new NewTopic(topico, 1, (short) 1);
+            adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
+            log.info("Tópico criado: " + topico);
+        } else {
+            log.error("Tópico já existe: " + topico);
         }
     }
 

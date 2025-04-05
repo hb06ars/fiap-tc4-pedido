@@ -3,6 +3,7 @@ package org.fiap.app.service.gateway;
 import lombok.extern.slf4j.Slf4j;
 import org.fiap.app.gateway.GatewayApi;
 import org.fiap.domain.dto.ClienteDTO;
+import org.fiap.infra.exceptions.ObjectNotFoundException;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -24,7 +25,7 @@ public class ClienteGatewayService {
             return gateway.clienteFindById(new GenericMessage<>(id));
         } catch (ResourceAccessException ex) {
             log.error(API_CLIENTES_INDISPONIVEL);
-            return null;
+            throw new ObjectNotFoundException(API_CLIENTES_INDISPONIVEL);
         }
     }
 }
